@@ -1,24 +1,57 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+  Collections,
+  Contact,
+  Craft,
+  CurtainReveal,
+  Gallery,
+  Heritage,
+  Loupe,
+  Nav,
+  PosterHero,
+  SignaturePiece,
+  Viewer,
+} from "@/components/skj/Sections";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Shree Kishan Jewellers & Sons — Fine Jewellery, Bikaner" },
+      {
+        name: "description",
+        content:
+          "Polki, diamond, gold, kundan, bridal and custom jewellery, handcrafted in Sarafa Bazaar, Bikaner across seven generations.",
+      },
+      {
+        property: "og:title",
+        content: "Shree Kishan Jewellers & Sons — Fine Jewellery, Bikaner",
+      },
+      {
+        property: "og:description",
+        content: "We Believe in Quality and Not in Competition.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const [open, setOpen] = useState<number | null>(null);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="bg-ivory font-body antialiased">
+      <CurtainReveal />
+      <Nav />
+      <PosterHero />
+      <SignaturePiece />
+      <Collections onOpen={setOpen} />
+      <Craft />
+      <Loupe />
+      <Heritage />
+      <Gallery onOpen={setOpen} />
+      <Contact />
+      <Viewer index={open} onClose={() => setOpen(null)} />
+    </main>
   );
 }

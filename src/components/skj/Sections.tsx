@@ -405,10 +405,10 @@ export function Craft() {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               <h2 className="mt-6 font-display text-5xl font-light text-ivory md:text-7xl">
-                {STEPS[step].t}
+                {STEPS[step]!.t}
               </h2>
               <p className="mt-5 max-w-sm font-body text-sm leading-relaxed text-ivory/65">
-                {STEPS[step].d}
+                {STEPS[step]!.d}
               </p>
             </motion.div>
           </AnimatePresence>
@@ -466,7 +466,7 @@ export function Loupe() {
           onMouseMove={(e) => move(e.clientX, e.clientY)}
           onTouchStart={() => setOn(true)}
           onTouchEnd={() => setOn(false)}
-          onTouchMove={(e) => move(e.touches[0].clientX, e.touches[0].clientY)}
+          onTouchMove={(e) => move(e.touches[0]!.clientX, e.touches[0]!.clientY)}
           className="relative aspect-[4/3] cursor-crosshair overflow-hidden bg-muted"
         >
           <img

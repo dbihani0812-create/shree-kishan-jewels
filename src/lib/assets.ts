@@ -31,6 +31,9 @@ import poster_2 from "@/assets/poster-2.webp.asset.json";
 import poster_3 from "@/assets/poster-3.webp.asset.json";
 import logo from "@/assets/logo.webp.asset.json";
 
-export const pieces: string[] = [piece_01.url, piece_02.url, piece_03.url, piece_04.url, piece_06.url, piece_07.url, piece_08.url, piece_09.url, piece_10.url, piece_11.url, piece_12.url, piece_13.url, piece_14.url, piece_15.url, piece_16.url, piece_17.url, piece_18.url, piece_19.url, piece_20.url, piece_21.url, piece_22.url, piece_23.url, piece_24.url, piece_25.url, piece_26.url, piece_27.url, piece_28.url];
-export const posters: string[] = [poster_1.url, poster_2.url, poster_3.url];
-export const logoUrl = logo.url;
+type Ptr = { url: string };
+const ptr = (a: unknown) => (a as Ptr).url;
+
+export const pieces: string[] = [ptr(piece_01), ptr(piece_02), ptr(piece_03), ptr(piece_04), ptr(piece_06), ptr(piece_07), ptr(piece_08), ptr(piece_09), ptr(piece_10), ptr(piece_11), ptr(piece_12), ptr(piece_13), ptr(piece_14), ptr(piece_15), ptr(piece_16), ptr(piece_17), ptr(piece_18), ptr(piece_19), ptr(piece_20), ptr(piece_21), ptr(piece_22), ptr(piece_23), ptr(piece_24), ptr(piece_25), ptr(piece_26), ptr(piece_27), ptr(piece_28)];
+export const posters: string[] = [ptr(poster_1), ptr(poster_2), ptr(poster_3)];
+export const logoUrl = ptr(logo);

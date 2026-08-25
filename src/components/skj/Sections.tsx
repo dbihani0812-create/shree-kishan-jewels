@@ -9,14 +9,16 @@ import {
   useMotionValue,
   AnimatePresence,
 } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
+import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
 
 const NAV = [
-  { label: "Home", href: "#top" },
-  { label: "Collections", href: "#collections" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Our Heritage", href: "#heritage" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#top" },
+  { label: "Collections", href: "/collections" },
+  { label: "Gallery", href: "/#gallery" },
+  { label: "Our Heritage", href: "/#heritage" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 /* ── WOW 01 — cinematic silk curtain reveal (≈2.6s) ───────────────── */
@@ -104,7 +106,7 @@ export function Nav() {
       }`}
     >
       <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-4 md:px-12">
-        <a href="#top" className="flex items-center gap-3">
+        <a href="/#top" className="flex items-center gap-3">
           <img src={logoUrl} alt="Shree Kishan Jewellers & Sons" className="h-9 w-9 rounded-full object-cover" />
           <span className="hidden font-display text-sm tracking-[0.3em] text-charcoal uppercase sm:block">
             Shree Kishan
@@ -122,14 +124,15 @@ export function Nav() {
               {n.label === "Collections" && (
                 <div className="pointer-events-none absolute top-full left-1/2 w-44 -translate-x-1/2 pt-5 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
                   <div className="border border-border bg-ivory/95 px-5 py-4 backdrop-blur">
-                    {["Polki", "Diamond", "Gold", "Kundan", "Bridal", "Custom"].map((c) => (
-                      <a
+                    {CATEGORIES.map((c) => (
+                      <Link
                         key={c}
-                        href="#collections"
+                        to="/collections"
+                        search={{ category: c }}
                         className="block py-1.5 font-body text-[11px] tracking-[0.2em] text-charcoal/75 uppercase hover:text-wine"
                       >
                         {c}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -295,77 +298,81 @@ export function SignaturePiece() {
   );
 }
 
-/* ── Collections — art-directed, no repeated card grid ───────────── */
-const CATS = [
-  { name: "Polki", img: pieces[12], note: "Uncut brilliance" },
-  { name: "Diamond", img: pieces[5], note: "Precision light" },
-  { name: "Gold", img: pieces[21], note: "Bikaner goldsmithing" },
-  { name: "Kundan", img: pieces[17], note: "Setting as craft" },
-  { name: "Bridal", img: pieces[26], note: "For the ceremony" },
-  { name: "Custom", img: pieces[8], note: "Made to your story" },
-];
-
-export function Collections({ onOpen }: { onOpen: (i: number) => void }) {
+/* ── Collections — category-wise sections, each with its own grid ── */
+export function Collections(_props?: { onOpen?: (i: number) => void }) {
   return (
     <section id="collections" className="bg-ivory px-6 py-28 md:px-12">
       <div className="mx-auto max-w-[1500px]">
-        <div className="mb-20 max-w-xl">
-          <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">Collections</p>
-          <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light text-charcoal md:text-6xl">
-            Six houses of<br />
-            <span className="italic text-wine">one craft.</span>
-          </h2>
+        <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-xl">
+            <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
+              Collections
+            </p>
+            <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light text-charcoal md:text-6xl">
+              Ten houses of<br />
+              <span className="italic text-wine">one craft.</span>
+            </h2>
+          </div>
+          <Link
+            to="/collections"
+            search={{}}
+            className="font-body text-[10px] tracking-[0.3em] text-wine uppercase hover:text-charcoal"
+          >
+            View full catalogue →
+          </Link>
         </div>
-        <div className="grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-12">
-          {CATS.map((c, i) => {
-            const spans = [
-              "md:col-span-7",
-              "md:col-span-5 md:pt-24",
-              "md:col-span-4",
-              "md:col-span-8 md:pt-16",
-              "md:col-span-8",
-              "md:col-span-4 md:pt-28",
-            ];
-            const ratio = [
-              "aspect-[4/3]",
-              "aspect-[3/4]",
-              "aspect-square",
-              "aspect-[16/10]",
-              "aspect-[16/9]",
-              "aspect-[3/4]",
-            ];
-            return (
-              <motion.figure
-                key={c.name}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                className={`${spans[i]} group cursor-pointer`}
-                onClick={() => onOpen(i * 3)}
-              >
-                <div className={`${ratio[i]} overflow-hidden bg-muted`}>
-                  <img
-                    src={c.img}
-                    alt={`${c.name} jewellery at Shree Kishan Jewellers & Sons`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
-                  />
-                </div>
-                <figcaption className="mt-5 flex items-baseline justify-between border-t border-border pt-4">
-                  <span className="font-display text-2xl font-light text-charcoal">{c.name}</span>
-                  <span className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-                    {c.note}
-                  </span>
-                </figcaption>
-              </motion.figure>
-            );
-          })}
+
+        <div className="space-y-20">
+          {CATEGORIES.map((cat) => (
+            <div key={cat}>
+              <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border pb-4">
+                <h3 className="font-display text-2xl font-light text-charcoal md:text-3xl">{cat}</h3>
+                <Link
+                  to="/collections"
+                  search={{ category: cat }}
+                  className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase hover:text-wine"
+                >
+                  {CATEGORY_NOTES[cat] ?? "Handcrafted in Bikaner"} · see all
+                </Link>
+              </div>
+              <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 lg:grid-cols-4">
+                {setsByCategory(cat).slice(0, 4).map((s) => (
+                  <motion.div
+                    key={s.slug}
+                    initial={{ opacity: 0, y: 26 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Link to="/collections/$slug" params={{ slug: s.slug }} className="group block">
+                      <div className="aspect-[4/5] overflow-hidden bg-muted">
+                        <img
+                          src={s.img}
+                          alt={`${s.name} — ${s.cat} jewellery by Shree Kishan Jewellers & Sons`}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
+                        />
+                      </div>
+                      <div className="mt-4 border-t border-border pt-3">
+                        <span className="block font-display text-lg font-light text-charcoal">
+                          {s.name}
+                        </span>
+                        <span className="mt-1.5 block font-body text-[10px] tracking-[0.3em] text-antique uppercase">
+                          {s.cat}
+                        </span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
+
 
 /* ── WOW 05 — craftsmanship: scroll-controlled visual story ─────── */
 const STEPS = [
@@ -524,46 +531,9 @@ export function Heritage() {
   );
 }
 
-/* ── Catalogue — every set named, each with its own category ─────── */
-type SetInfo = { name: string; cat: string };
-const SETS: SetInfo[] = [
-  { name: "Ambika Polki Choker", cat: "Polki" },
-  { name: "Rajwada Emerald Set", cat: "Emerald" },
-  { name: "Mohar Kundan Necklace", cat: "Kundan" },
-  { name: "Bikaner Gold Haar", cat: "Gold" },
-  { name: "Padmini Bridal Set", cat: "Bridal" },
-  { name: "Chandni Diamond Set", cat: "Diamond" },
-  { name: "Meenakari Rani Haar", cat: "Meenakari" },
-  { name: "Vasundhara Polki Set", cat: "Polki" },
-  { name: "Sarafa Heritage Set", cat: "Heirloom" },
-  { name: "Gulmohar Ruby Set", cat: "Ruby" },
-  { name: "Neelam Emerald Choker", cat: "Emerald" },
-  { name: "Kesariya Temple Set", cat: "Temple" },
-  { name: "Anmol Polki Rani Haar", cat: "Polki" },
-  { name: "Shubh Vivah Bridal Set", cat: "Bridal" },
-  { name: "Jharokha Kundan Set", cat: "Kundan" },
-  { name: "Mirage Diamond Haar", cat: "Diamond" },
-  { name: "Panna Emerald Necklace", cat: "Emerald" },
-  { name: "Rasleela Kundan Set", cat: "Kundan" },
-  { name: "Marwar Gold Set", cat: "Gold" },
-  { name: "Chhavi Polki Necklace", cat: "Polki" },
-  { name: "Suvarna Gold Haar", cat: "Gold" },
-  { name: "Devangi Bridal Choker", cat: "Bridal" },
-  { name: "Kanchan Kundan Haar", cat: "Kundan" },
-  { name: "Roshni Diamond Set", cat: "Diamond" },
-  { name: "Amrapali Polki Set", cat: "Polki" },
-  { name: "Trishala Emerald Haar", cat: "Emerald" },
-  { name: "Virasat Heirloom Set", cat: "Heirloom" },
-];
-
-const CAT_FILTERS = ["All", ...Array.from(new Set(SETS.map((s) => s.cat)))];
-
-export function Gallery({ onOpen }: { onOpen: (i: number) => void }) {
-  const [filter, setFilter] = useState("All");
-  const items = pieces
-    .map((src, i) => ({ src, i, info: SETS[i] ?? { name: `Heritage Set ${i + 1}`, cat: "Heirloom" } }))
-    .filter((it) => filter === "All" || it.info.cat === filter);
-
+/* ── Catalogue — every set named, linked to its own page ─────────── */
+export function Gallery({ onOpen }: { onOpen?: (i: number) => void }) {
+  void onOpen;
   return (
     <section id="gallery" className="bg-ivory px-6 py-28 md:px-12">
       <div className="mx-auto max-w-[1500px]">
@@ -572,51 +542,61 @@ export function Gallery({ onOpen }: { onOpen: (i: number) => void }) {
           The house, piece by piece.
         </h2>
         <p className="mt-6 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
-          Every set carries its own name and category. Please enquire in store or on WhatsApp for
-          details.
+          Every set carries its own name, category and page. Please enquire in store or on WhatsApp
+          for details.
         </p>
 
-        <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-6">
-          {CAT_FILTERS.map((c) => (
-            <button
+        <nav
+          aria-label="Browse by category"
+          className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-6"
+        >
+          <Link
+            to="/collections"
+            search={{}}
+            className="font-body text-[10px] tracking-[0.3em] text-wine uppercase hover:text-charcoal"
+          >
+            All
+          </Link>
+          {CATEGORIES.map((c) => (
+            <Link
               key={c}
-              onClick={() => setFilter(c)}
-              className={`font-body text-[10px] tracking-[0.3em] uppercase transition-colors ${
-                filter === c ? "text-wine" : "text-muted-foreground hover:text-charcoal"
-              }`}
+              to="/collections"
+              search={{ category: c }}
+              className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase hover:text-charcoal"
             >
               {c}
-            </button>
+            </Link>
           ))}
-        </div>
+        </nav>
 
-        <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map(({ src, i, info }) => (
+        <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-12 sm:gap-x-8 lg:grid-cols-4">
+          {SETS.map((s) => (
             <motion.figure
-              key={src}
-              initial={{ opacity: 0, y: 44 }}
+              key={s.slug}
+              initial={{ opacity: 0, y: 36 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="group cursor-pointer"
-              onClick={() => onOpen(i)}
+              className="group"
             >
-              <div className="aspect-[4/5] overflow-hidden bg-muted">
-                <img
-                  src={src}
-                  alt={`${info.name} — ${info.cat} jewellery by Shree Kishan Jewellers & Sons`}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
-                />
-              </div>
-              <figcaption className="mt-5 border-t border-border pt-4 text-center">
-                <span className="block font-display text-xl font-light tracking-wide text-charcoal">
-                  {info.name}
-                </span>
-                <span className="mt-2 block font-body text-[10px] tracking-[0.32em] text-antique uppercase">
-                  {info.cat}
-                </span>
-              </figcaption>
+              <Link to="/collections/$slug" params={{ slug: s.slug }} className="block">
+                <div className="aspect-[4/5] overflow-hidden bg-muted">
+                  <img
+                    src={s.img}
+                    alt={`${s.name} — ${s.cat} jewellery by Shree Kishan Jewellers & Sons`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
+                  />
+                </div>
+                <figcaption className="mt-4 border-t border-border pt-3 text-center">
+                  <span className="block font-display text-lg font-light tracking-wide text-charcoal">
+                    {s.name}
+                  </span>
+                  <span className="mt-1.5 block font-body text-[10px] tracking-[0.32em] text-antique uppercase">
+                    {s.cat}
+                  </span>
+                </figcaption>
+              </Link>
             </motion.figure>
           ))}
         </div>
@@ -624,6 +604,7 @@ export function Gallery({ onOpen }: { onOpen: (i: number) => void }) {
     </section>
   );
 }
+
 
 /* ── Showroom band — real shop photography, softly blurred ───────── */
 export function Showroom() {

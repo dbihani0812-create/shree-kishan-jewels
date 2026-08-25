@@ -9,7 +9,7 @@ import {
   useMotionValue,
   AnimatePresence,
 } from "motion/react";
-import { pieces, posters, logoUrl } from "@/lib/assets";
+import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
 
 const NAV = [
   { label: "Home", href: "#top" },

@@ -14,11 +14,11 @@ import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/
 import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
 
 const NAV = [
-  { label: "Home", href: "#top" },
-  { label: "Collections", href: "#collections" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Our Heritage", href: "#heritage" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#top" },
+  { label: "Collections", href: "/collections" },
+  { label: "Gallery", href: "/#gallery" },
+  { label: "Our Heritage", href: "/#heritage" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 /* ── WOW 01 — cinematic silk curtain reveal (≈2.6s) ───────────────── */
@@ -106,7 +106,7 @@ export function Nav() {
       }`}
     >
       <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-4 md:px-12">
-        <a href="#top" className="flex items-center gap-3">
+        <a href="/#top" className="flex items-center gap-3">
           <img src={logoUrl} alt="Shree Kishan Jewellers & Sons" className="h-9 w-9 rounded-full object-cover" />
           <span className="hidden font-display text-sm tracking-[0.3em] text-charcoal uppercase sm:block">
             Shree Kishan
@@ -124,14 +124,15 @@ export function Nav() {
               {n.label === "Collections" && (
                 <div className="pointer-events-none absolute top-full left-1/2 w-44 -translate-x-1/2 pt-5 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
                   <div className="border border-border bg-ivory/95 px-5 py-4 backdrop-blur">
-                    {["Polki", "Diamond", "Gold", "Kundan", "Bridal", "Custom"].map((c) => (
-                      <a
+                    {CATEGORIES.map((c) => (
+                      <Link
                         key={c}
-                        href="#collections"
+                        to="/collections"
+                        search={{ category: c }}
                         className="block py-1.5 font-body text-[11px] tracking-[0.2em] text-charcoal/75 uppercase hover:text-wine"
                       >
                         {c}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>

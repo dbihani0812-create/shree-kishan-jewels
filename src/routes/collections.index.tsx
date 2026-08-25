@@ -5,7 +5,7 @@ import { Nav } from "@/components/skj/Sections";
 
 type Search = { category?: string };
 
-export const Route = createFileRoute("/collections")({
+export const Route = createFileRoute("/collections/")({
   validateSearch: (search: Record<string, unknown>): Search => {
     const c = typeof search.category === "string" ? search.category : undefined;
     return c && CATEGORIES.includes(c) ? { category: c } : {};

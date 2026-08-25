@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Collections,
   Contact,
@@ -39,6 +39,24 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [open, setOpen] = useState<number | null>(null);
+
+  // Fresh loads / refreshes always begin at the hero. A hash is honoured
+  // intentionally, after layout settles.
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    const hash = window.location.hash.replace("#", "");
+    if (!hash) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    const t = window.setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 900);
+    return () => window.clearTimeout(t);
+  }, []);
+
 
   return (
     <main className="bg-ivory font-body antialiased">

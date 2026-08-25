@@ -524,39 +524,80 @@ export function Heritage() {
   );
 }
 
-/* ── Gallery — editorial masonry ─────────────────────────────────── */
+/* ── Catalogue — named sets, image-led, no pricing ───────────────── */
+const SET_NAMES = [
+  "Ambika Polki Choker",
+  "Rajwada Emerald Set",
+  "Mohar Kundan Necklace",
+  "Bikaner Gold Haar",
+  "Padmini Bridal Set",
+  "Chandni Diamond Set",
+  "Meenakari Rani Haar",
+  "Vasundhara Polki Set",
+  "Sarafa Heritage Set",
+  "Gulmohar Ruby Set",
+  "Neelam Emerald Choker",
+  "Kesariya Temple Set",
+  "Anmol Polki Rani Haar",
+  "Shubh Vivah Bridal Set",
+  "Jharokha Kundan Set",
+  "Mirage Diamond Haar",
+  "Panna Emerald Necklace",
+  "Rasleela Kundan Set",
+  "Marwar Gold Set",
+  "Chhavi Polki Necklace",
+  "Suvarna Gold Haar",
+  "Devangi Bridal Choker",
+  "Kanchan Kundan Haar",
+  "Roshni Diamond Set",
+  "Amrapali Polki Set",
+  "Trishala Emerald Haar",
+  "Virasat Heirloom Set",
+];
+
 export function Gallery({ onOpen }: { onOpen: (i: number) => void }) {
   return (
     <section id="gallery" className="bg-ivory px-6 py-28 md:px-12">
       <div className="mx-auto max-w-[1500px]">
-        <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">Gallery</p>
-        <h2 className="mt-5 mb-14 font-display text-4xl font-light text-charcoal md:text-5xl">
+        <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">The Catalogue</p>
+        <h2 className="mt-5 max-w-2xl font-display text-4xl leading-[1.08] font-light text-charcoal md:text-5xl">
           The house, piece by piece.
         </h2>
-        <div className="columns-2 gap-4 md:columns-3 lg:columns-4 [&>*]:mb-4">
+        <p className="mt-6 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
+          Each set is one of a kind. Please enquire in store or on WhatsApp for details.
+        </p>
+        <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
           {pieces.map((src, i) => (
-            <motion.button
+            <motion.figure
               key={src}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 44 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="group cursor-pointer"
               onClick={() => onOpen(i)}
-              className="group block w-full overflow-hidden bg-muted"
             >
-              <img
-                src={src}
-                alt={`Jewellery set ${i + 1} — Shree Kishan Jewellers & Sons`}
-                loading="lazy"
-                className="w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-              />
-            </motion.button>
+              <div className="aspect-[4/5] overflow-hidden bg-muted">
+                <img
+                  src={src}
+                  alt={`${SET_NAMES[i] ?? "Jewellery set"} — Shree Kishan Jewellers & Sons`}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
+                />
+              </div>
+              <figcaption className="mt-5 border-t border-border pt-4 text-center">
+                <span className="font-display text-xl font-light tracking-wide text-charcoal">
+                  {SET_NAMES[i] ?? `Heritage Set ${i + 1}`}
+                </span>
+              </figcaption>
+            </motion.figure>
           ))}
         </div>
       </div>
     </section>
   );
 }
+
 
 /* ── Fullscreen inspect viewer (zoom + pan, real photo only) ─────── */
 export function Viewer({ index, onClose }: { index: number | null; onClose: () => void }) {

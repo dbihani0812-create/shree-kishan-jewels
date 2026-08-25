@@ -295,77 +295,81 @@ export function SignaturePiece() {
   );
 }
 
-/* ── Collections — art-directed, no repeated card grid ───────────── */
-const CATS = [
-  { name: "Polki", img: pieces[12], note: "Uncut brilliance" },
-  { name: "Diamond", img: pieces[5], note: "Precision light" },
-  { name: "Gold", img: pieces[21], note: "Bikaner goldsmithing" },
-  { name: "Kundan", img: pieces[17], note: "Setting as craft" },
-  { name: "Bridal", img: pieces[26], note: "For the ceremony" },
-  { name: "Custom", img: pieces[8], note: "Made to your story" },
-];
-
-export function Collections({ onOpen }: { onOpen: (i: number) => void }) {
+/* ── Collections — category-wise sections, each with its own grid ── */
+export function Collections(_props?: { onOpen?: (i: number) => void }) {
   return (
     <section id="collections" className="bg-ivory px-6 py-28 md:px-12">
       <div className="mx-auto max-w-[1500px]">
-        <div className="mb-20 max-w-xl">
-          <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">Collections</p>
-          <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light text-charcoal md:text-6xl">
-            Six houses of<br />
-            <span className="italic text-wine">one craft.</span>
-          </h2>
+        <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-xl">
+            <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
+              Collections
+            </p>
+            <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light text-charcoal md:text-6xl">
+              Ten houses of<br />
+              <span className="italic text-wine">one craft.</span>
+            </h2>
+          </div>
+          <Link
+            to="/collections"
+            search={{}}
+            className="font-body text-[10px] tracking-[0.3em] text-wine uppercase hover:text-charcoal"
+          >
+            View full catalogue →
+          </Link>
         </div>
-        <div className="grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-12">
-          {CATS.map((c, i) => {
-            const spans = [
-              "md:col-span-7",
-              "md:col-span-5 md:pt-24",
-              "md:col-span-4",
-              "md:col-span-8 md:pt-16",
-              "md:col-span-8",
-              "md:col-span-4 md:pt-28",
-            ];
-            const ratio = [
-              "aspect-[4/3]",
-              "aspect-[3/4]",
-              "aspect-square",
-              "aspect-[16/10]",
-              "aspect-[16/9]",
-              "aspect-[3/4]",
-            ];
-            return (
-              <motion.figure
-                key={c.name}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                className={`${spans[i]} group cursor-pointer`}
-                onClick={() => onOpen(i * 3)}
-              >
-                <div className={`${ratio[i]} overflow-hidden bg-muted`}>
-                  <img
-                    src={c.img}
-                    alt={`${c.name} jewellery at Shree Kishan Jewellers & Sons`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
-                  />
-                </div>
-                <figcaption className="mt-5 flex items-baseline justify-between border-t border-border pt-4">
-                  <span className="font-display text-2xl font-light text-charcoal">{c.name}</span>
-                  <span className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-                    {c.note}
-                  </span>
-                </figcaption>
-              </motion.figure>
-            );
-          })}
+
+        <div className="space-y-20">
+          {CATEGORIES.map((cat) => (
+            <div key={cat}>
+              <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border pb-4">
+                <h3 className="font-display text-2xl font-light text-charcoal md:text-3xl">{cat}</h3>
+                <Link
+                  to="/collections"
+                  search={{ category: cat }}
+                  className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase hover:text-wine"
+                >
+                  {CATEGORY_NOTES[cat] ?? "Handcrafted in Bikaner"} · see all
+                </Link>
+              </div>
+              <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 lg:grid-cols-4">
+                {setsByCategory(cat).slice(0, 4).map((s) => (
+                  <motion.div
+                    key={s.slug}
+                    initial={{ opacity: 0, y: 26 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Link to="/collections/$slug" params={{ slug: s.slug }} className="group block">
+                      <div className="aspect-[4/5] overflow-hidden bg-muted">
+                        <img
+                          src={s.img}
+                          alt={`${s.name} — ${s.cat} jewellery by Shree Kishan Jewellers & Sons`}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
+                        />
+                      </div>
+                      <div className="mt-4 border-t border-border pt-3">
+                        <span className="block font-display text-lg font-light text-charcoal">
+                          {s.name}
+                        </span>
+                        <span className="mt-1.5 block font-body text-[10px] tracking-[0.3em] text-antique uppercase">
+                          {s.cat}
+                        </span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
+
 
 /* ── WOW 05 — craftsmanship: scroll-controlled visual story ─────── */
 const STEPS = [

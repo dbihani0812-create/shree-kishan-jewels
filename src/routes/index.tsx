@@ -11,6 +11,7 @@ import {
   Nav,
   PosterHero,
   SignaturePiece,
+  Showroom,
   Viewer,
 } from "@/components/skj/Sections";
 
@@ -50,6 +51,7 @@ function Index() {
       <Loupe />
       <Heritage />
       <Gallery onOpen={setOpen} />
+      <Showroom />
       <Contact />
       <Viewer index={open} onClose={() => setOpen(null)} />
     </main>

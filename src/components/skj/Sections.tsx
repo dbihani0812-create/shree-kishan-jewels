@@ -9,7 +9,7 @@ import {
   useMotionValue,
   AnimatePresence,
 } from "motion/react";
-import { pieces, posters, logoUrl } from "@/lib/assets";
+import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
 
 const NAV = [
   { label: "Home", href: "#top" },
@@ -524,38 +524,46 @@ export function Heritage() {
   );
 }
 
-/* ── Catalogue — named sets, image-led, no pricing ───────────────── */
-const SET_NAMES = [
-  "Ambika Polki Choker",
-  "Rajwada Emerald Set",
-  "Mohar Kundan Necklace",
-  "Bikaner Gold Haar",
-  "Padmini Bridal Set",
-  "Chandni Diamond Set",
-  "Meenakari Rani Haar",
-  "Vasundhara Polki Set",
-  "Sarafa Heritage Set",
-  "Gulmohar Ruby Set",
-  "Neelam Emerald Choker",
-  "Kesariya Temple Set",
-  "Anmol Polki Rani Haar",
-  "Shubh Vivah Bridal Set",
-  "Jharokha Kundan Set",
-  "Mirage Diamond Haar",
-  "Panna Emerald Necklace",
-  "Rasleela Kundan Set",
-  "Marwar Gold Set",
-  "Chhavi Polki Necklace",
-  "Suvarna Gold Haar",
-  "Devangi Bridal Choker",
-  "Kanchan Kundan Haar",
-  "Roshni Diamond Set",
-  "Amrapali Polki Set",
-  "Trishala Emerald Haar",
-  "Virasat Heirloom Set",
+/* ── Catalogue — every set named, each with its own category ─────── */
+type SetInfo = { name: string; cat: string };
+const SETS: SetInfo[] = [
+  { name: "Ambika Polki Choker", cat: "Polki" },
+  { name: "Rajwada Emerald Set", cat: "Emerald" },
+  { name: "Mohar Kundan Necklace", cat: "Kundan" },
+  { name: "Bikaner Gold Haar", cat: "Gold" },
+  { name: "Padmini Bridal Set", cat: "Bridal" },
+  { name: "Chandni Diamond Set", cat: "Diamond" },
+  { name: "Meenakari Rani Haar", cat: "Meenakari" },
+  { name: "Vasundhara Polki Set", cat: "Polki" },
+  { name: "Sarafa Heritage Set", cat: "Heirloom" },
+  { name: "Gulmohar Ruby Set", cat: "Ruby" },
+  { name: "Neelam Emerald Choker", cat: "Emerald" },
+  { name: "Kesariya Temple Set", cat: "Temple" },
+  { name: "Anmol Polki Rani Haar", cat: "Polki" },
+  { name: "Shubh Vivah Bridal Set", cat: "Bridal" },
+  { name: "Jharokha Kundan Set", cat: "Kundan" },
+  { name: "Mirage Diamond Haar", cat: "Diamond" },
+  { name: "Panna Emerald Necklace", cat: "Emerald" },
+  { name: "Rasleela Kundan Set", cat: "Kundan" },
+  { name: "Marwar Gold Set", cat: "Gold" },
+  { name: "Chhavi Polki Necklace", cat: "Polki" },
+  { name: "Suvarna Gold Haar", cat: "Gold" },
+  { name: "Devangi Bridal Choker", cat: "Bridal" },
+  { name: "Kanchan Kundan Haar", cat: "Kundan" },
+  { name: "Roshni Diamond Set", cat: "Diamond" },
+  { name: "Amrapali Polki Set", cat: "Polki" },
+  { name: "Trishala Emerald Haar", cat: "Emerald" },
+  { name: "Virasat Heirloom Set", cat: "Heirloom" },
 ];
 
+const CAT_FILTERS = ["All", ...Array.from(new Set(SETS.map((s) => s.cat)))];
+
 export function Gallery({ onOpen }: { onOpen: (i: number) => void }) {
+  const [filter, setFilter] = useState("All");
+  const items = pieces
+    .map((src, i) => ({ src, i, info: SETS[i] ?? { name: `Heritage Set ${i + 1}`, cat: "Heirloom" } }))
+    .filter((it) => filter === "All" || it.info.cat === filter);
+
   return (
     <section id="gallery" className="bg-ivory px-6 py-28 md:px-12">
       <div className="mx-auto max-w-[1500px]">
@@ -564,10 +572,26 @@ export function Gallery({ onOpen }: { onOpen: (i: number) => void }) {
           The house, piece by piece.
         </h2>
         <p className="mt-6 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
-          Each set is one of a kind. Please enquire in store or on WhatsApp for details.
+          Every set carries its own name and category. Please enquire in store or on WhatsApp for
+          details.
         </p>
-        <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
-          {pieces.map((src, i) => (
+
+        <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-6">
+          {CAT_FILTERS.map((c) => (
+            <button
+              key={c}
+              onClick={() => setFilter(c)}
+              className={`font-body text-[10px] tracking-[0.3em] uppercase transition-colors ${
+                filter === c ? "text-wine" : "text-muted-foreground hover:text-charcoal"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map(({ src, i, info }) => (
             <motion.figure
               key={src}
               initial={{ opacity: 0, y: 44 }}
@@ -580,19 +604,60 @@ export function Gallery({ onOpen }: { onOpen: (i: number) => void }) {
               <div className="aspect-[4/5] overflow-hidden bg-muted">
                 <img
                   src={src}
-                  alt={`${SET_NAMES[i] ?? "Jewellery set"} — Shree Kishan Jewellers & Sons`}
+                  alt={`${info.name} — ${info.cat} jewellery by Shree Kishan Jewellers & Sons`}
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
                 />
               </div>
               <figcaption className="mt-5 border-t border-border pt-4 text-center">
-                <span className="font-display text-xl font-light tracking-wide text-charcoal">
-                  {SET_NAMES[i] ?? `Heritage Set ${i + 1}`}
+                <span className="block font-display text-xl font-light tracking-wide text-charcoal">
+                  {info.name}
+                </span>
+                <span className="mt-2 block font-body text-[10px] tracking-[0.32em] text-antique uppercase">
+                  {info.cat}
                 </span>
               </figcaption>
             </motion.figure>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Showroom band — real shop photography, softly blurred ───────── */
+export function Showroom() {
+  return (
+    <section className="relative isolate overflow-hidden px-6 py-32 md:px-12">
+      <img
+        src={shopFacadeUrl}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 -z-20 h-full w-full scale-110 object-cover blur-[7px]"
+      />
+      <div className="absolute inset-0 -z-10 bg-charcoal/70" />
+      <div className="mx-auto grid max-w-[1200px] items-center gap-14 md:grid-cols-2">
+        <div>
+          <p className="font-body text-[10px] tracking-[0.42em] text-champagne uppercase">
+            The Showroom
+          </p>
+          <h2 className="mt-5 font-display text-4xl leading-[1.08] font-light text-ivory md:text-5xl">
+            Sarafa Bazaar,<br />
+            <span className="italic text-champagne">Bikaner.</span>
+          </h2>
+          <p className="mt-7 max-w-md font-body text-sm leading-relaxed text-ivory/75">
+            Marble, gold and quiet light — the house where every set is weighed, worked and worn for
+            the first time. Visit us to see the collections in daylight.
+          </p>
+        </div>
+        <figure className="overflow-hidden">
+          <img
+            src={shopInteriorUrl}
+            alt="Interior of the Shree Kishan Jewellers & Sons showroom in Bikaner"
+            loading="lazy"
+            className="aspect-[4/3] w-full object-cover"
+          />
+        </figure>
       </div>
     </section>
   );

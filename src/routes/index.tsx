@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Collections,
   Contact,
@@ -14,6 +14,7 @@ import {
   Showroom,
   Viewer,
 } from "@/components/skj/Sections";
+import { useScrollMemory } from "@/hooks/use-scroll-memory";
 
 export const Route = createFileRoute("/")({
   head: () => ({

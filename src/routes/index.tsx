@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Collections,
   Contact,
@@ -14,6 +14,7 @@ import {
   Showroom,
   Viewer,
 } from "@/components/skj/Sections";
+import { useScrollMemory } from "@/hooks/use-scroll-memory";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,22 +41,10 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [open, setOpen] = useState<number | null>(null);
 
-  // Fresh loads / refreshes always begin at the hero. A hash is honoured
-  // intentionally, after layout settles.
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-    const hash = window.location.hash.replace("#", "");
-    if (!hash) {
-      window.scrollTo(0, 0);
-      return;
-    }
-    const t = window.setTimeout(() => {
-      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 900);
-    return () => window.clearTimeout(t);
-  }, []);
+  // Fresh loads / refreshes always begin at the hero; returning from a set
+  // page restores the previous scroll position. A hash is honoured on load.
+  useScrollMemory("/", { honourHash: true });
+
 
 
   return (

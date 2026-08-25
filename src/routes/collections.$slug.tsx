@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { getSet, setsByCategory } from "@/lib/catalogue";
 import { Nav } from "@/components/skj/Sections";
 import { Lightbox } from "@/components/skj/Lightbox";
+import { useScrollMemory } from "@/hooks/use-scroll-memory";
 
 export const Route = createFileRoute("/collections/$slug")({
   loader: ({ params }) => {
@@ -30,7 +31,10 @@ export const Route = createFileRoute("/collections/$slug")({
         { property: "og:type", content: "article" },
         { property: "og:image", content: set.img },
         { name: "twitter:image", content: set.img },
+        { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:url", content: `/collections/${set.slug}` },
       ],
+      links: [{ rel: "canonical", href: `/collections/${set.slug}` }],
     };
   },
   component: SetPage,
@@ -39,6 +43,7 @@ export const Route = createFileRoute("/collections/$slug")({
 function SetPage() {
   const { set } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<number | null>(null);
+  useScrollMemory(`/collections/${set.slug}`);
   const related = setsByCategory(set.cat).filter((s) => s.slug !== set.slug).slice(0, 4);
 
   return (

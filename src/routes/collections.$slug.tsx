@@ -6,6 +6,8 @@ import { Nav } from "@/components/skj/Sections";
 import { Lightbox } from "@/components/skj/Lightbox";
 import { useScrollMemory } from "@/hooks/use-scroll-memory";
 
+const BASE_URL = "https://shree-kishan-jewels.lovable.app";
+
 export const Route = createFileRoute("/collections/$slug")({
   loader: ({ params }) => {
     const set = getSet(params.slug);
@@ -22,6 +24,7 @@ export const Route = createFileRoute("/collections/$slug")({
       0,
       158,
     );
+    const url = `${BASE_URL}/collections/${set.slug}`;
     return {
       meta: [
         { title },
@@ -32,9 +35,47 @@ export const Route = createFileRoute("/collections/$slug")({
         { property: "og:image", content: set.img },
         { name: "twitter:image", content: set.img },
         { name: "twitter:card", content: "summary_large_image" },
-        { property: "og:url", content: `/collections/${set.slug}` },
+        { property: "og:url", content: url },
       ],
-      links: [{ rel: "canonical", href: `/collections/${set.slug}` }],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Collections",
+                item: `${BASE_URL}/collections`,
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: `${set.cat} Jewellery`,
+                item: `${BASE_URL}/collections?category=${encodeURIComponent(set.cat)}`,
+              },
+              { "@type": "ListItem", position: 4, name: set.name, item: url },
+            ],
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: set.name,
+            url,
+            image: set.gallery,
+            description: set.story.join(" "),
+            category: `${set.cat} Jewellery`,
+            brand: { "@type": "Brand", name: "Shree Kishan Jewellers & Sons" },
+          }),
+        },
+      ],
     };
   },
   component: SetPage,

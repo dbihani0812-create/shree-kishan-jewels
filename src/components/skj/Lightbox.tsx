@@ -137,18 +137,30 @@ export function Lightbox({ images, index, label, onClose, onChange }: Props) {
             {label && (
               <p className="font-display text-lg font-light text-ivory/90">{label}</p>
             )}
-            <p className="font-body text-[10px] tracking-[0.32em] text-ivory/45 uppercase">
+            <p
+              className="font-body text-[10px] tracking-[0.32em] text-ivory/45 uppercase"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               {String((index ?? 0) + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
               {images.length > 1 ? " · swipe or arrow keys" : ""}
             </p>
 
             {images.length > 1 && (
-              <div className="flex max-w-[92vw] gap-3 overflow-x-auto px-4 pb-1">
+              <div
+                role="tablist"
+                aria-label="Gallery thumbnails"
+                className="flex max-w-[92vw] gap-3 overflow-x-auto px-4 pb-1"
+              >
                 {images.map((src, i) => (
                   <button
                     key={src + i}
+                    role="tab"
                     onClick={() => onChange(i)}
-                    aria-label={`Show image ${i + 1}`}
+                    aria-label={
+                      label ? `Show ${label} image ${i + 1}` : `Show image ${i + 1}`
+                    }
+                    aria-selected={i === index}
                     aria-current={i === index}
                     className={`h-14 w-14 shrink-0 overflow-hidden border transition-opacity ${
                       i === index
@@ -164,7 +176,9 @@ export function Lightbox({ images, index, label, onClose, onChange }: Props) {
           </div>
 
           <button
+            ref={closeRef}
             onClick={onClose}
+            aria-label="Close full screen gallery"
             className="absolute top-6 right-6 font-body text-[11px] tracking-[0.3em] text-ivory/70 uppercase hover:text-ivory md:right-10"
           >
             Close

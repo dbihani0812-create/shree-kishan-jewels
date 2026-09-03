@@ -131,11 +131,17 @@ function SetPage() {
                   </p>
                 ))}
               </div>
-              <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
+              <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a
-                  href="https://wa.me/919928873555"
-                  className="font-body text-[11px] tracking-[0.3em] text-wine uppercase hover:text-charcoal"
+                  href={whatsappHref(set.name, set.cat)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Enquire about ${set.name} on WhatsApp`}
+                  className="inline-flex items-center gap-3 border border-wine/40 bg-wine px-6 py-3 font-body text-[11px] tracking-[0.3em] text-ivory uppercase transition-colors hover:bg-charcoal hover:border-charcoal"
                 >
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                    <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.13-.42-2.15-1.33-.8-.71-1.33-1.59-1.48-1.89-.15-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.07-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.38-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.33 5.07 4.54.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM12.04 21.5h-.01a9.42 9.42 0 0 1-4.79-1.31l-.34-.2-3.56.93.95-3.47-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.24-9.43 9.45-9.43a9.4 9.4 0 0 1 6.67 2.77 9.35 9.35 0 0 1 2.76 6.67c0 5.2-4.24 9.42-9.43 9.42zM20.5 3.49A11.35 11.35 0 0 0 12.04 0C5.79 0 .71 5.08.71 11.32c0 1.99.52 3.94 1.51 5.65L.5 24l7.2-1.89a11.3 11.3 0 0 0 4.34 1.1h.01c6.24 0 11.32-5.08 11.32-11.32 0-3.03-1.18-5.87-3.32-8.01z" />
+                  </svg>
                   Enquire on WhatsApp
                 </a>
                 <a

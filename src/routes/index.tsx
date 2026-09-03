@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
+  Categories,
   Collections,
   Contact,
   Craft,
@@ -53,6 +54,7 @@ function Index() {
       <Nav />
       <PosterHero />
       <SignaturePiece />
+      <Categories />
       <Collections onOpen={setOpen} />
       <Craft />
       <Loupe />

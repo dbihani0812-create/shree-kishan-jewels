@@ -18,23 +18,53 @@ export function Lightbox({ images, index, label, onClose, onChange }: Props) {
   const open = index !== null;
   const touchX = useRef<number | null>(null);
   const touchY = useRef<number | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const closeRef = useRef<HTMLButtonElement | null>(null);
+  /** Element that opened the lightbox — focus returns here on close. */
+  const opener = useRef<HTMLElement | null>(null);
 
   const step = (dir: number) =>
     onChange(((index ?? 0) + dir + images.length) % images.length);
 
   useEffect(() => {
     if (!open) return;
+    opener.current = document.activeElement as HTMLElement | null;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 60);
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
       if (e.key === "ArrowRight") onChange(((index ?? 0) + 1) % images.length);
       if (e.key === "ArrowLeft") onChange(((index ?? 0) - 1 + images.length) % images.length);
+      if (e.key === "Tab") {
+        // Focus trap: cycle within the dialog only.
+        const nodes = dialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+        );
+        if (!nodes || nodes.length === 0) return;
+        const list = Array.from(nodes);
+        const first = list[0]!;
+        const last = list[list.length - 1]!;
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey && (active === first || !dialogRef.current?.contains(active))) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (active === last || !dialogRef.current?.contains(active))) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {
+      window.clearTimeout(focusTimer);
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
+      opener.current?.focus?.();
     };
   }, [open, index, images.length, onClose, onChange]);
 

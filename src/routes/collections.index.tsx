@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { CATEGORIES, CATEGORY_NOTES, setsByCategory } from "@/lib/catalogue";
+import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
 import { Nav } from "@/components/skj/Sections";
 import { useScrollMemory } from "@/hooks/use-scroll-memory";
 
@@ -12,15 +12,20 @@ const BASE_URL = "https://shree-kishan-jewels.lovable.app";
 export const Route = createFileRoute("/collections/")({
   validateSearch: (search: Record<string, unknown>): Search => {
     const c = typeof search['category'] === "string" ? search['category'] : undefined;
-    return { category: c && CATEGORIES.includes(c) ? c : DEFAULT_CATEGORY };
+    return { category: c && (c === "All" || CATEGORIES.includes(c)) ? c : DEFAULT_CATEGORY };
   },
   head: ({ match }) => {
     const cat = match.search.category ?? DEFAULT_CATEGORY;
-    const note = CATEGORY_NOTES[cat] ?? "Handcrafted in Bikaner";
-    const title = `${cat} Jewellery — Collections | Shree Kishan Jewellers & Sons`;
-    const description = `${note}. Browse our ${cat.toLowerCase()} jewellery sets, each named and handcrafted in Sarafa Bazaar, Bikaner.`;
+    const isAll = cat === "All";
+    const note = isAll ? "Every named set" : CATEGORY_NOTES[cat] ?? "Handcrafted in Bikaner";
+    const title = isAll
+      ? "All Jewellery Collections | Shree Kishan Jewellers & Sons, Bikaner"
+      : `${cat} Jewellery — Collections | Shree Kishan Jewellers & Sons`;
+    const description = isAll
+      ? "Every named jewellery set — polki, kundan, emerald, diamond, gold, bridal and more — handcrafted in Sarafa Bazaar, Bikaner."
+      : `${note}. Browse our ${cat.toLowerCase()} jewellery sets, each named and handcrafted in Sarafa Bazaar, Bikaner.`;
     const url = `${BASE_URL}/collections?category=${encodeURIComponent(cat)}`;
-    const sets = setsByCategory(cat);
+    const sets = isAll ? SETS : setsByCategory(cat);
     const hero = sets[0]?.img;
     return {
       meta: [
@@ -53,7 +58,7 @@ export const Route = createFileRoute("/collections/")({
                 name: "Collections",
                 item: `${BASE_URL}/collections`,
               },
-              { "@type": "ListItem", position: 3, name: `${cat} Jewellery`, item: url },
+              { "@type": "ListItem", position: 3, name: isAll ? "All Jewellery" : `${cat} Jewellery`, item: url },
             ],
           }),
         },
@@ -62,7 +67,7 @@ export const Route = createFileRoute("/collections/")({
           children: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ItemList",
-            name: `${cat} Jewellery`,
+            name: isAll ? "All Jewellery" : `${cat} Jewellery`,
             description,
             numberOfItems: sets.length,
             itemListElement: sets.map((s, i) => ({
@@ -83,7 +88,8 @@ export const Route = createFileRoute("/collections/")({
 function CollectionsPage() {
   const { category } = Route.useSearch();
   const active = category ?? DEFAULT_CATEGORY;
-  const sets = setsByCategory(active);
+  const isAll = active === "All";
+  const sets = isAll ? SETS : setsByCategory(active);
   useScrollMemory("/collections");
 
   return (
@@ -96,11 +102,11 @@ function CollectionsPage() {
             The Collections
           </p>
           <h1 className="mt-5 max-w-2xl font-display text-4xl leading-[1.05] font-light text-charcoal md:text-6xl">
-            {active}
+            {isAll ? "All" : active}
             <span className="italic text-wine"> jewellery.</span>
           </h1>
           <p className="mt-6 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
-            {CATEGORY_NOTES[active] ?? "Handcrafted in Bikaner"} ·{" "}
+            {isAll ? "Every named set" : CATEGORY_NOTES[active] ?? "Handcrafted in Bikaner"} ·{" "}
             {String(sets.length).padStart(2, "0")} named sets. Please enquire in store or on
             WhatsApp for details.
           </p>
@@ -113,7 +119,7 @@ function CollectionsPage() {
           aria-label="Jewellery categories"
           className="mx-auto flex max-w-[1500px] gap-7 overflow-x-auto px-6 py-4 md:px-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {CATEGORIES.map((c) => (
+          {[...CATEGORIES, "All"].map((c) => (
             <Link
               key={c}
               to="/collections"
@@ -142,7 +148,7 @@ function CollectionsPage() {
               id="active-category"
               className="font-display text-3xl font-light text-charcoal md:text-4xl"
             >
-              {active}
+              {isAll ? "All sets" : active}
             </h2>
             <p className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
               {String(sets.length).padStart(2, "0")} sets

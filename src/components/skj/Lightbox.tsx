@@ -77,9 +77,14 @@ export function Lightbox({ images, index, label, onClose, onChange }: Props) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
           className="fixed inset-0 z-[90] flex items-center justify-center bg-charcoal/96 backdrop-blur-sm"
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
-          aria-label={label ?? "Image gallery"}
+          aria-label={
+            label
+              ? `${label} — full screen gallery, image ${(index ?? 0) + 1} of ${images.length}`
+              : "Image gallery"
+          }
           onTouchStart={(e) => {
             touchX.current = e.touches[0]?.clientX ?? null;
             touchY.current = e.touches[0]?.clientY ?? null;

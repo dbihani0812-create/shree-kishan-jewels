@@ -7,6 +7,13 @@ import { Lightbox } from "@/components/skj/Lightbox";
 import { useScrollMemory } from "@/hooks/use-scroll-memory";
 
 const BASE_URL = "https://shree-kishan-jewels.lovable.app";
+const SHOP_WHATSAPP = "919928873555";
+
+/** WhatsApp deep link pre-filled with the set the visitor is looking at. */
+const whatsappHref = (name: string, cat: string) =>
+  `https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(
+    `Hello Shree Kishan Jewellers & Sons, I would like to enquire about the "${name}" (${cat}) set.`,
+  )}`;
 
 export const Route = createFileRoute("/collections/$slug")({
   loader: ({ params }) => {

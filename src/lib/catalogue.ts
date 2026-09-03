@@ -68,3 +68,33 @@ export const CATEGORY_NOTES: Record<string, string> = {
 
 export const setsByCategory = (cat: string) => SETS.filter((s) => s.cat === cat);
 export const getSet = (slug: string) => SETS.find((s) => s.slug === slug);
+
+/** Category-specific local search phrasing, grounded in what the shop actually does. */
+const CATEGORY_LOCAL: Record<string, string> = {
+  Polki: "polki jewellers in Bikaner",
+  Emerald: "emerald jewellery in Bikaner",
+  Kundan: "kundan jewellers in Bikaner",
+  Gold: "gold jewellers in Bikaner",
+  Bridal: "bridal jewellers in Bikaner",
+  Diamond: "diamond jewellers in Bikaner",
+  Meenakari: "meenakari jewellery in Bikaner",
+  Heirloom: "heirloom jewellery restoration in Bikaner",
+  Ruby: "ruby jewellery in Bikaner",
+  Temple: "temple jewellery in Bikaner",
+};
+
+/**
+ * Local-search copy for a set page: where it is made, who it is for and how to
+ * see it in Bikaner. Written per set so no two pages repeat the same text.
+ */
+export const localCopy = (set: JewellerySet): string[] => {
+  const phrase = CATEGORY_LOCAL[set.cat] ?? "jewellers in Bikaner";
+  return [
+    `${set.name} is made and kept at our own counter in Sarafa Bazaar, Bikaner — the lane where the city has bought its gold for generations. If you are looking for ${phrase}, this set can be seen in daylight at the showroom before you decide anything.`,
+    `Families come to us from across Bikaner district and wider Rajasthan for ${set.cat.toLowerCase()} work: Nokha, Deshnok, Lunkaransar, Sri Dungargarh and Jaisalmer. Sizing, restringing and small design changes on ${set.name} are done in our own workshop above the shop, not sent out.`,
+    `To see ${set.name} in person, message us on WhatsApp with the set name and we will keep it ready. For bridal viewings a few days' notice lets the karigars lay out the matching pieces together.`,
+  ];
+};
+
+export const categoryLocalPhrase = (cat: string) =>
+  CATEGORY_LOCAL[cat] ?? "jewellers in Bikaner";

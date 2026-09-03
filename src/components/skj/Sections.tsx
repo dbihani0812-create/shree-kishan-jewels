@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
-  useSpring,
   useTransform,
-  useMotionValue,
+
   AnimatePresence,
 } from "motion/react";
 import { Link } from "@tanstack/react-router";

@@ -221,80 +221,100 @@ export function PosterHero() {
 }
 
 /* ── WOW 03 + 04 — scroll is the camera; drag to inspect ─────────── */
+/* ── Signature piece — quiet editorial transition out of the hero ── */
 export function SignaturePiece() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
-
-  const scale = useTransform(p, [0, 0.28, 0.55, 0.8, 1], [0.34, 0.72, 1.05, 1.5, 1.18]);
-  const x = useTransform(p, [0, 0.5, 0.82, 1], ["0%", "0%", "-6%", "-30%"]);
-  const rotate = useTransform(p, [0, 0.55, 1], [-9, 3, 8]);
-  const bg = useTransform(
-    p,
-    [0, 0.5, 1],
-    [
-      "oklch(0.968 0.011 84)",
-      "oklch(0.912 0.02 80)",
-      "oklch(0.30 0.02 60)",
-    ],
-  );
-  const capOpacity = useTransform(p, [0.42, 0.55, 0.9, 1], [0, 1, 1, 0]);
-  const capX = useTransform(p, [0.42, 0.65], [40, 0]);
-  const introOpacity = useTransform(p, [0, 0.16], [1, 0]);
-  const dark = useTransform(p, [0.6, 1], [0, 1]);
-
-  const drag = useMotionValue(0);
-  const dragRot = useSpring(drag, { stiffness: 120, damping: 20 });
-
   return (
-    <section ref={ref} className="relative h-[420svh]">
-      <motion.div
-        style={{ backgroundColor: bg }}
-        className="sticky top-0 flex h-[100svh] items-center justify-center overflow-hidden"
-      >
+    <section className="border-y border-border bg-ivory px-6 py-24 md:px-12 md:py-32">
+      <div className="mx-auto grid max-w-[1300px] items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
         <motion.div
-          aria-hidden
-          style={{ opacity: dark }}
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,transparent_10%,rgba(20,14,10,0.55)_75%)]"
-        />
-        <motion.p
-          style={{ opacity: introOpacity }}
-          className="absolute top-[22vh] left-1/2 -translate-x-1/2 text-center font-body text-[10px] tracking-[0.42em] text-charcoal/60 uppercase"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="aspect-[4/5] overflow-hidden bg-muted md:aspect-[5/4]"
         >
-          The Signature Piece
-        </motion.p>
-
-        <motion.div
-          style={{ scale, x, rotate }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.18}
-          onDrag={(_, info) => drag.set(info.offset.x * 0.12)}
-          onDragEnd={() => drag.set(0)}
-          className="relative z-10 w-[min(78vw,640px)] cursor-grab active:cursor-grabbing"
-        >
-          <motion.img
+          <img
             src={pieces[10]}
             alt="Signature emerald and polki choker by Shree Kishan Jewellers & Sons"
-            style={{ rotateY: dragRot }}
-            className="w-full select-none"
-            draggable={false}
+            className="h-full w-full object-cover"
           />
         </motion.div>
 
         <motion.div
-          style={{ opacity: capOpacity, x: capX }}
-          className="absolute right-[6vw] bottom-[16vh] z-10 max-w-[16rem] text-right md:bottom-auto md:top-1/2 md:-translate-y-1/2"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="font-body text-[10px] tracking-[0.4em] text-antique uppercase">Polki · Emerald</p>
-          <h2 className="mt-3 font-display text-3xl leading-tight font-light text-ivory md:text-4xl">
-            Set by hand,<br />stone by stone.
-          </h2>
-          <p className="mt-4 font-body text-xs leading-relaxed tracking-wide text-ivory/70">
-            Drag to inspect the piece.
+          <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
+            The signature piece · Polki &amp; Emerald
           </p>
+          <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light text-charcoal md:text-5xl">
+            Set by hand,<br />
+            <span className="italic text-wine">stone by stone.</span>
+          </h2>
+          <p className="mt-6 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
+            Uncut polki and Colombian emeralds seated in 22k gold at our workshop in Sarafa
+            Bazaar, Bikaner — one piece, finished over several months.
+          </p>
+          <Link
+            to="/collections"
+            search={{}}
+            className="mt-9 inline-block border-b border-wine/40 pb-1 font-body text-[11px] tracking-[0.3em] text-wine uppercase hover:border-charcoal hover:text-charcoal"
+          >
+            See the collections
+          </Link>
         </motion.div>
-      </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Categories — simple, clean category grid ── */
+export function Categories() {
+  return (
+    <section id="categories" className="bg-ivory px-6 py-24 md:px-12">
+      <div className="mx-auto max-w-[1500px]">
+        <div className="mb-12 max-w-xl">
+          <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
+            Categories
+          </p>
+          <h2 className="mt-5 font-display text-3xl leading-[1.05] font-light text-charcoal md:text-5xl">
+            Browse by craft.
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
+          {CATEGORIES.map((cat) => {
+            const hero = setsByCategory(cat)[0];
+            return (
+              <Link
+                key={cat}
+                to="/collections"
+                search={{ category: cat }}
+                className="group block"
+              >
+                <div className="aspect-square overflow-hidden bg-muted">
+                  {hero && (
+                    <img
+                      src={hero.img}
+                      alt={`${cat} jewellery at Shree Kishan Jewellers & Sons, Bikaner`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.05]"
+                    />
+                  )}
+                </div>
+                <h3 className="mt-4 border-t border-border pt-3 font-display text-lg font-light text-charcoal">
+                  {cat}
+                </h3>
+                <p className="mt-1 font-body text-[10px] tracking-[0.28em] text-muted-foreground uppercase">
+                  {CATEGORY_NOTES[cat] ?? "Handcrafted in Bikaner"}
+                </p>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </section>
   );
 }

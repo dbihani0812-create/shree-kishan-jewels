@@ -18,6 +18,7 @@ const NAV = [
   { label: "Collections", href: "/collections" },
   { label: "Gallery", href: "/#gallery" },
   { label: "Our Heritage", href: "/#heritage" },
+  { label: "Bikaner Showroom", href: "/jewellers-in-bikaner" },
   { label: "Contact", href: "/#contact" },
 ];
 

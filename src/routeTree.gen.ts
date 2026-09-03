@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JewellersInBikanerRouteImport } from './routes/jewellers-in-bikaner'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as CollectionsIndexRouteImport } from './routes/collections.index'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
@@ -17,6 +18,11 @@ import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JewellersInBikanerRoute = JewellersInBikanerRouteImport.update({
+  id: '/jewellers-in-bikaner',
+  path: '/jewellers-in-bikaner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -37,12 +43,14 @@ const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/jewellers-in-bikaner': typeof JewellersInBikanerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/collections/': typeof CollectionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/jewellers-in-bikaner': typeof JewellersInBikanerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/collections': typeof CollectionsIndexRoute
@@ -50,20 +58,38 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/jewellers-in-bikaner': typeof JewellersInBikanerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/collections/': typeof CollectionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml' | '/collections/$slug' | '/collections/'
+  fullPaths:
+    | '/'
+    | '/jewellers-in-bikaner'
+    | '/sitemap.xml'
+    | '/collections/$slug'
+    | '/collections/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/collections/$slug' | '/collections'
-  id: '__root__' | '/' | '/sitemap.xml' | '/collections/$slug' | '/collections/'
+  to:
+    | '/'
+    | '/jewellers-in-bikaner'
+    | '/sitemap.xml'
+    | '/collections/$slug'
+    | '/collections'
+  id:
+    | '__root__'
+    | '/'
+    | '/jewellers-in-bikaner'
+    | '/sitemap.xml'
+    | '/collections/$slug'
+    | '/collections/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  JewellersInBikanerRoute: typeof JewellersInBikanerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
@@ -76,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jewellers-in-bikaner': {
+      id: '/jewellers-in-bikaner'
+      path: '/jewellers-in-bikaner'
+      fullPath: '/jewellers-in-bikaner'
+      preLoaderRoute: typeof JewellersInBikanerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -104,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  JewellersInBikanerRoute: JewellersInBikanerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,

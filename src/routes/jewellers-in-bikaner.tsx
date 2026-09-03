@@ -215,6 +215,60 @@ function LocalPage() {
       </section>
 
       <section
+        aria-labelledby="local-search"
+        className="border-t border-border px-6 py-24 md:px-12"
+      >
+        <div className="mx-auto max-w-[1100px]">
+          <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
+            Who we serve
+          </p>
+          <h2
+            id="local-search"
+            className="mt-5 max-w-3xl font-display text-3xl leading-[1.1] font-light text-charcoal md:text-4xl"
+          >
+            Looking for jewellers in Bikaner? Start at the counter, not a catalogue.
+          </h2>
+          <div className="mt-12 grid gap-10 md:grid-cols-3">
+            <div>
+              <h3 className="font-display text-xl font-light text-charcoal">
+                Bridal jewellers in Bikaner
+              </h3>
+              <p className="mt-3 font-body text-sm leading-relaxed text-muted-foreground">
+                Brides and their families sit with us over two or three visits — choker first,
+                then the haar, earrings and maang tikka matched to it. Everything is fitted in
+                our workshop above the shop before the wedding week begins.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-display text-xl font-light text-charcoal">
+                Polki, kundan and emerald work
+              </h3>
+              <p className="mt-3 font-body text-sm leading-relaxed text-muted-foreground">
+                Uncut polki, hand-burnished kundan, meenakari fired in stages and emeralds
+                chosen in daylight. These are the pieces people come to Sarafa Bazaar for, and
+                they are made here rather than bought in finished.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-display text-xl font-light text-charcoal">
+                Repair, re-set and re-string
+              </h3>
+              <p className="mt-3 font-body text-sm leading-relaxed text-muted-foreground">
+                Old family sets are documented, re-seated and returned wearable. Restringing on
+                pieces bought from us is done for the life of the piece.
+              </p>
+            </div>
+          </div>
+          <p className="mt-14 max-w-3xl font-body text-sm leading-relaxed text-muted-foreground">
+            Families travel to the shop from across Bikaner city and district — Sarafa Bazaar,
+            Kote Gate, Rani Bazaar, Gangashahr, Nokha, Deshnok, Lunkaransar and Sri Dungargarh —
+            and from Jaisalmer, Jodhpur and Sriganganagar for bridal commissions. Tell us the set
+            name on WhatsApp and we will keep it ready at the counter.
+          </p>
+        </div>
+      </section>
+
+      <section
         aria-labelledby="visit"
         className="border-t border-border px-6 py-24 text-center md:px-12"
       >

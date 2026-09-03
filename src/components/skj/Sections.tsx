@@ -318,12 +318,16 @@ export function Categories() {
   );
 }
 
-/* ── Collections — category-wise sections, each with its own grid ── */
+/* ── Collections — one category at a time, with an "All" tab last ── */
 export function Collections(_props?: { onOpen?: (i: number) => void }) {
+  const TABS = [...CATEGORIES, "All"];
+  const [tab, setTab] = useState<string>(CATEGORIES[0]!);
+  const shown = tab === "All" ? SETS : setsByCategory(tab);
+
   return (
     <section id="collections" className="bg-ivory px-6 py-28 md:px-12">
       <div className="mx-auto max-w-[1500px]">
-        <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-xl">
             <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
               Collections
@@ -335,57 +339,77 @@ export function Collections(_props?: { onOpen?: (i: number) => void }) {
           </div>
           <Link
             to="/collections"
-            search={{}}
+            search={{ category: tab }}
             className="font-body text-[10px] tracking-[0.3em] text-wine uppercase hover:text-charcoal"
           >
             View full catalogue →
           </Link>
         </div>
 
-        <div className="space-y-20">
-          {CATEGORIES.map((cat) => (
-            <div key={cat}>
-              <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border pb-4">
-                <h3 className="font-display text-2xl font-light text-charcoal md:text-3xl">{cat}</h3>
-                <Link
-                  to="/collections"
-                  search={{ category: cat }}
-                  className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase hover:text-wine"
-                >
-                  {CATEGORY_NOTES[cat] ?? "Handcrafted in Bikaner"} · see all
-                </Link>
-              </div>
-              <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 lg:grid-cols-4">
-                {setsByCategory(cat).slice(0, 4).map((s) => (
-                  <motion.div
-                    key={s.slug}
-                    initial={{ opacity: 0, y: 26 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <Link to="/collections/$slug" params={{ slug: s.slug }} className="group block">
-                      <div className="aspect-[4/5] overflow-hidden bg-muted">
-                        <img
-                          src={s.img}
-                          alt={`${s.name} — ${s.cat} jewellery by Shree Kishan Jewellers & Sons`}
-                          loading="lazy"
-                          className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
-                        />
-                      </div>
-                      <div className="mt-4 border-t border-border pt-3">
-                        <span className="block font-display text-lg font-light text-charcoal">
-                          {s.name}
-                        </span>
-                        <span className="mt-1.5 block font-body text-[10px] tracking-[0.3em] text-antique uppercase">
-                          {s.cat}
-                        </span>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+        <div
+          role="tablist"
+          aria-label="Jewellery categories"
+          className="flex gap-7 overflow-x-auto border-y border-border py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {TABS.map((c) => (
+            <button
+              key={c}
+              role="tab"
+              aria-selected={tab === c}
+              onClick={() => setTab(c)}
+              className={`shrink-0 border-b-2 pb-1 font-body text-[10px] tracking-[0.3em] uppercase transition-colors ${
+                tab === c
+                  ? "border-wine text-wine"
+                  : "border-transparent text-muted-foreground hover:text-charcoal"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-baseline justify-between gap-3">
+          <h3 className="font-display text-2xl font-light text-charcoal md:text-3xl">
+            {tab === "All" ? "All sets" : tab}
+          </h3>
+          <p className="font-body text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+            {tab === "All"
+              ? `${String(shown.length).padStart(2, "0")} sets`
+              : `${CATEGORY_NOTES[tab] ?? "Handcrafted in Bikaner"} · ${String(shown.length).padStart(2, "0")} sets`}
+          </p>
+        </div>
+
+        <div
+          key={tab}
+          className="mt-10 grid grid-cols-2 gap-x-6 gap-y-12 sm:gap-x-8 lg:grid-cols-4"
+        >
+          {shown.map((s) => (
+            <motion.div
+              key={s.slug}
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Link to="/collections/$slug" params={{ slug: s.slug }} className="group block">
+                <div className="aspect-[4/5] overflow-hidden bg-muted">
+                  <img
+                    src={s.img}
+                    alt={`${s.name} — ${s.cat} jewellery by Shree Kishan Jewellers & Sons`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
+                  />
+                </div>
+                <div className="mt-4 border-t border-border pt-3">
+                  <span className="block font-display text-lg font-light text-charcoal">
+                    {s.name}
+                  </span>
+                  <span className="mt-1.5 block font-body text-[10px] tracking-[0.3em] text-antique uppercase">
+                    {s.cat}
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>

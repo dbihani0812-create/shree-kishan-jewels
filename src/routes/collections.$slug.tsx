@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "motion/react";
-import { getSet, setsByCategory } from "@/lib/catalogue";
+import { getSet, setsByCategory, localCopy, categoryLocalPhrase } from "@/lib/catalogue";
 import { Nav } from "@/components/skj/Sections";
 import { Lightbox } from "@/components/skj/Lightbox";
 import { useScrollMemory } from "@/hooks/use-scroll-memory";
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/collections/$slug")({
     }
     const { set } = loaderData;
     const title = `${set.name} — ${set.cat} | Shree Kishan Jewellers & Sons`;
-    const description = `${set.name}, a ${set.cat.toLowerCase()} set handcrafted in Sarafa Bazaar, Bikaner. ${set.story[0]}`.slice(
+    const description = `${set.name} — ${set.cat.toLowerCase()} set handcrafted at Sarafa Bazaar by Shree Kishan Jewellers & Sons, ${categoryLocalPhrase(set.cat)}. ${set.story[0]}`.slice(
       0,
       158,
     );
@@ -185,6 +185,31 @@ function SetPage() {
                 </button>
               ))}
             </div>
+          </section>
+
+          <section aria-labelledby="local" className="mt-24 border-t border-border pt-14">
+            <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
+              Sarafa Bazaar · Bikaner · Rajasthan
+            </p>
+            <h2
+              id="local"
+              className="mt-5 font-display text-2xl font-light text-charcoal md:text-3xl"
+            >
+              Seeing {set.name} in Bikaner
+            </h2>
+            <div className="mt-8 grid gap-8 md:grid-cols-3">
+              {localCopy(set).map((p) => (
+                <p key={p} className="font-body text-sm leading-relaxed text-muted-foreground">
+                  {p}
+                </p>
+              ))}
+            </div>
+            <Link
+              to="/jewellers-in-bikaner"
+              className="mt-10 inline-block font-body text-[11px] tracking-[0.3em] text-charcoal uppercase underline decoration-antique/50 underline-offset-8 hover:decoration-charcoal"
+            >
+              About our Bikaner showroom
+            </Link>
           </section>
 
           {related.length > 0 && (

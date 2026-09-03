@@ -7,6 +7,7 @@ import { useScrollMemory } from "@/hooks/use-scroll-memory";
 type Search = { category?: string };
 
 const DEFAULT_CATEGORY = CATEGORIES[0]!;
+const BASE_URL = "https://shree-kishan-jewels.lovable.app";
 
 export const Route = createFileRoute("/collections/")({
   validateSearch: (search: Record<string, unknown>): Search => {
@@ -18,6 +19,9 @@ export const Route = createFileRoute("/collections/")({
     const note = CATEGORY_NOTES[cat] ?? "Handcrafted in Bikaner";
     const title = `${cat} Jewellery — Collections | Shree Kishan Jewellers & Sons`;
     const description = `${note}. Browse our ${cat.toLowerCase()} jewellery sets, each named and handcrafted in Sarafa Bazaar, Bikaner.`;
+    const url = `${BASE_URL}/collections?category=${encodeURIComponent(cat)}`;
+    const sets = setsByCategory(cat);
+    const hero = sets[0]?.img;
     return {
       meta: [
         { title },
@@ -25,9 +29,52 @@ export const Route = createFileRoute("/collections/")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: `/collections?category=${encodeURIComponent(cat)}` },
+        { property: "og:url", content: url },
+        ...(hero
+          ? [
+              { property: "og:image", content: hero },
+              { name: "twitter:image", content: hero },
+              { name: "twitter:card", content: "summary_large_image" },
+            ]
+          : []),
       ],
-      links: [{ rel: "canonical", href: `/collections?category=${encodeURIComponent(cat)}` }],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Collections",
+                item: `${BASE_URL}/collections`,
+              },
+              { "@type": "ListItem", position: 3, name: `${cat} Jewellery`, item: url },
+            ],
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: `${cat} Jewellery`,
+            description,
+            numberOfItems: sets.length,
+            itemListElement: sets.map((s, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: s.name,
+              url: `${BASE_URL}/collections/${s.slug}`,
+              image: s.img,
+            })),
+          }),
+        },
+      ],
     };
   },
   component: CollectionsPage,

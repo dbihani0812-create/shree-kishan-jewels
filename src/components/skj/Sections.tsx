@@ -9,7 +9,7 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { pieces, heroSlides, heroVideoUrl, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
+import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
 import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
 
 const NAV = [
@@ -178,96 +178,60 @@ export function Nav() {
 /* ── WOW 02 — hero: uploaded poster artwork only, no overlay text ── */
 export function PosterHero() {
   const [i, setI] = useState(0);
-  const count = heroSlides.length;
-  const go = (n: number) => setI((n + count) % count);
-
-  const [zoom, setZoom] = useState(1.3);
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.18]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const fade = useTransform(scrollYProgress, [0.55, 1], [1, 0]);
 
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % count), 6500);
+    const t = setInterval(() => setI((v) => (v + 1) % posters.length), 6500);
     return () => clearInterval(t);
-  }, [count]);
-
-  // Crop the campaign lettering baked into the artwork so the centred
-  // headline always sits on clean image.
-  useEffect(() => {
-    const fit = () =>
-      setZoom(window.innerWidth / window.innerHeight > 0.85 ? 1.9 : 1.75);
-    fit();
-    window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
   }, []);
 
   return (
-    <section id="top" className="relative h-[100svh] overflow-hidden bg-charcoal">
-      {/* Looping background film */}
-      <video
-        src={heroVideoUrl}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        aria-hidden
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
-      <div className="absolute inset-0 bg-charcoal/45" aria-hidden />
-
-      {/* Swipeable photo slides */}
-      <motion.div
-        className="absolute inset-0 flex touch-pan-y items-center justify-center"
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.18}
-        onDragEnd={(_, info) => {
-          if (info.offset.x < -60) go(i + 1);
-          else if (info.offset.x > 60) go(i - 1);
-        }}
-      >
-        <div
-          className="absolute inset-0 overflow-hidden"
-          style={{
-            transformOrigin: "100% 50%",
-            transform: `scale(${zoom})`,
-          }}
-        >
-          <AnimatePresence mode="sync">
-            <motion.img
-              key={i}
-              src={heroSlides[i]}
-              alt="Shree Kishan Jewellers & Sons campaign photograph"
-              draggable={false}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-              className="absolute inset-0 h-full w-full object-cover object-center select-none"
-            />
-          </AnimatePresence>
-        </div>
+    <section id="top" ref={ref} className="relative h-[100svh] overflow-hidden bg-ivory">
+      <motion.div style={{ scale, y, opacity: fade }} className="absolute inset-0">
+        <AnimatePresence mode="sync">
+          <motion.img
+            key={i}
+            src={posters[i]}
+            alt="Shree Kishan Jewellers & Sons campaign poster"
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.6, ease: [0.4, 0, 0.2, 1] }}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        </AnimatePresence>
       </motion.div>
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/60" aria-hidden />
-
-      {/* Centred, fixed brand text */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center">
-        <p className="font-body text-[9px] tracking-[0.42em] text-ivory/85 uppercase md:text-[11px]">
-          Shree Kishan Jewellers &amp; Sons
+      {/* Always-visible brand & tagline overlay — keeps written content on
+          screen regardless of how each poster image is cropped. */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 3.4, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 px-5 pb-20 text-center"
+      >
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-charcoal/70 via-charcoal/30 to-transparent" aria-hidden />
+        <p className="relative font-body text-[9px] tracking-[0.42em] text-ivory/80 uppercase md:text-[11px]">
+          Shree Kishan Jewellers & Sons
         </p>
-        <h1 className="font-display text-2xl leading-[1.05] font-light tracking-[0.14em] text-ivory uppercase md:text-4xl">
+        <h1 className="relative font-display text-2xl leading-[1.05] font-light tracking-[0.14em] text-ivory uppercase md:text-4xl">
           We Believe in Quality
         </h1>
-        <p className="font-display text-base italic text-champagne md:text-lg">
-          &amp; Not in Competition.
+        <p className="relative font-display text-base italic text-champagne md:text-lg">
+          & Not in Competition.
         </p>
-      </div>
+      </motion.div>
 
       <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2">
-        {heroSlides.map((_, k) => (
+        {posters.map((_, k) => (
           <button
             key={k}
             onClick={() => setI(k)}
-            aria-label={`Slide ${k + 1}`}
+            aria-label={`Poster ${k + 1}`}
             className={`h-px w-10 transition-all duration-500 ${k === i ? "bg-ivory" : "bg-ivory/40"}`}
           />
         ))}

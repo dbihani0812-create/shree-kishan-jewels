@@ -222,7 +222,7 @@ export function PosterHero() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-            className="absolute inset-0 h-full w-full object-cover object-[72%_center] select-none"
+            className="absolute inset-0 h-full w-full object-cover object-center select-none scale-[1.25] origin-[80%_50%] md:scale-[1.55] md:origin-[88%_50%]"
           />
         </AnimatePresence>
       </motion.div>

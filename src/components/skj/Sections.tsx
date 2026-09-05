@@ -9,7 +9,7 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
+import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl, storePhotos } from "@/lib/assets";
 import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
 
 const NAV = [
@@ -693,10 +693,15 @@ export function Gallery({ onOpen }: { onOpen?: (i: number) => void }) {
 }
 
 
-/* ── Showroom band — real shop photography, softly blurred ───────── */
+/* ── Showroom band — real shop photography, softly blurred ─────────
+ *  The entire card is clickable and opens the uploaded store photographs
+ *  (façade + interior) in a premium full-screen lightbox. The existing
+ *  card design, typography, spacing and image are untouched. */
 export function Showroom() {
+  const [open, setOpen] = useState(false);
   return (
-    <section className="relative isolate overflow-hidden px-6 py-32 md:px-12">
+    <>
+    <section className="group relative isolate overflow-hidden px-6 py-32 md:px-12">
       <img
         src={shopFacadeUrl}
         alt=""
@@ -704,6 +709,15 @@ export function Showroom() {
         className="absolute inset-0 -z-20 h-full w-full scale-110 object-cover blur-[7px]"
       />
       <div className="absolute inset-0 -z-10 bg-charcoal/70" />
+      {/* Full-card click target — invisible, sits above content, below modal */}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label="Visit our store — open the showroom photograph full screen"
+        className="absolute inset-0 z-10 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne"
+      >
+        <span className="sr-only">Open the showroom photograph full screen</span>
+      </button>
       <div className="mx-auto grid max-w-[1200px] items-center gap-14 md:grid-cols-2">
         <div>
           <p className="font-body text-[10px] tracking-[0.42em] text-champagne uppercase">
@@ -716,6 +730,12 @@ export function Showroom() {
           <p className="mt-7 max-w-md font-body text-sm leading-relaxed text-ivory/75">
             Marble, gold and quiet light — the house where every set is weighed, worked and worn for
             the first time. Visit us to see the collections in daylight.
+            <span
+              aria-hidden="true"
+              className="ml-2 inline-block text-champagne transition-transform duration-300 group-hover:translate-x-1"
+            >
+              →
+            </span>
           </p>
         </div>
         <figure className="overflow-hidden">
@@ -728,6 +748,142 @@ export function Showroom() {
         </figure>
       </div>
     </section>
+    <StoreLightbox
+      open={open}
+      onClose={() => setOpen(false)}
+      images={storePhotos}
+    />
+    </>
+  );
+}
+
+/* ── Visit-Our-Store lightbox — premium, fade + scale, click-outside close ─ */
+function StoreLightbox({
+  open,
+  onClose,
+  images,
+}: {
+  open: boolean;
+  onClose: () => void;
+  images: string[];
+}) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (!open) return;
+    setI(0);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight" && images.length > 1) setI((v) => (v + 1) % images.length);
+      if (e.key === "ArrowLeft" && images.length > 1) setI((v) => (v - 1 + images.length) % images.length);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, onClose, images.length]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35 }}
+          onClick={onClose}
+          className="fixed inset-0 z-[95] flex items-center justify-center bg-charcoal/85 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Visit our store — full screen photographs"
+        >
+          <motion.div
+            key={i}
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.98, opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative flex max-h-[90vh] max-w-[92vw] items-center justify-center"
+          >
+            <img
+              src={images[i]}
+              alt="Shree Kishan Jewellers & Sons showroom — store photograph"
+              className="max-h-[88vh] max-w-[92vw] object-contain"
+              draggable={false}
+            />
+          </motion.div>
+
+          {images.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setI((v) => (v - 1 + images.length) % images.length);
+                }}
+                aria-label="Previous photograph"
+                className="absolute left-3 font-body text-3xl text-ivory/60 transition-colors hover:text-ivory md:left-8"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setI((v) => (v + 1) % images.length);
+                }}
+                aria-label="Next photograph"
+                className="absolute right-3 font-body text-3xl text-ivory/60 transition-colors hover:text-ivory md:right-8"
+              >
+                ›
+              </button>
+            </>
+          )}
+
+          {images.length > 1 && (
+            <div
+              role="tablist"
+              aria-label="Store photographs"
+              className="absolute bottom-6 flex max-w-[92vw] gap-3 overflow-x-auto px-4"
+            >
+              {images.map((src, idx) => (
+                <button
+                  key={src + idx}
+                  type="button"
+                  role="tab"
+                  aria-selected={idx === i}
+                  aria-label={`Show store photograph ${idx + 1}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setI(idx);
+                  }}
+                  className={`h-12 w-12 shrink-0 overflow-hidden border transition-opacity ${
+                    idx === i ? "border-champagne opacity-100" : "border-ivory/20 opacity-50 hover:opacity-90"
+                  }`}
+                >
+                  <img src={src} alt="" className="h-full w-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+            aria-label="Close photograph"
+            className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center text-3xl leading-none text-ivory/80 transition-colors hover:text-ivory md:right-6 md:top-6"
+          >
+            ×
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

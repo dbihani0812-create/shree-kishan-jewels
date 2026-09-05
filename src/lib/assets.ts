@@ -42,5 +42,9 @@ export const logoUrl = ptr(logo);
 
 import shopFacade from "@/assets/shop-facade.jpeg.asset.json";
 import shopInterior from "@/assets/shop-interior.jpeg.asset.json";
+import shopInteriorLarge from "@/assets/store-interior-large.jpeg.asset.json";
 export const shopFacadeUrl = ptr(shopFacade);
 export const shopInteriorUrl = ptr(shopInterior);
+export const shopInteriorLargeUrl = ptr(shopInteriorLarge);
+/** Storefront + interior photographs shown in the Visit-Our-Store lightbox. */
+export const storePhotos: string[] = [shopFacadeUrl, shopInteriorLargeUrl];

@@ -212,19 +212,21 @@ export function PosterHero() {
           else if (info.offset.x > 60) go(i - 1);
         }}
       >
-        <AnimatePresence mode="sync">
-          <motion.img
-            key={i}
-            src={heroSlides[i]}
-            alt="Shree Kishan Jewellers & Sons campaign photograph"
-            draggable={false}
-            initial={{ opacity: 0, scale: 1.03 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-            className="absolute inset-0 h-full w-full object-cover object-center select-none scale-[1.25] origin-[80%_50%] md:scale-[1.55] md:origin-[88%_50%]"
-          />
-        </AnimatePresence>
+        <div className="absolute inset-0 origin-[80%_50%] scale-[1.25] md:origin-[88%_50%] md:scale-[1.55]">
+          <AnimatePresence mode="sync">
+            <motion.img
+              key={i}
+              src={heroSlides[i]}
+              alt="Shree Kishan Jewellers & Sons campaign photograph"
+              draggable={false}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
+              className="absolute inset-0 h-full w-full object-cover object-center select-none"
+            />
+          </AnimatePresence>
+        </div>
       </motion.div>
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/60" aria-hidden />

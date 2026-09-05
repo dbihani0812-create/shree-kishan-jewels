@@ -212,7 +212,13 @@ export function PosterHero() {
           else if (info.offset.x > 60) go(i - 1);
         }}
       >
-        <div className="absolute inset-0 origin-[80%_50%] scale-[1.25] md:origin-[100%_50%] md:scale-[1.75]">
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{
+            transformOrigin: "100% 50%",
+            transform: `scale(${zoom})`,
+          }}
+        >
           <AnimatePresence mode="sync">
             <motion.img
               key={i}

@@ -81,38 +81,44 @@ export function CurtainReveal() {
 
 /* ── Navbar: hides on scroll down, returns on scroll up ───────────── */
 export function Nav() {
-  const [hidden, setHidden] = useState(false);
   const [solid, setSolid] = useState(false);
   const [menu, setMenu] = useState(false);
-  const last = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setSolid(y > 40);
-      setHidden(y > 240 && y > last.current);
-      last.current = y;
-    };
+    const onScroll = () => setSolid(window.scrollY > 40);
+    setSolid(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close the mobile menu on route/hash navigation.
+  useEffect(() => {
+    const onPop = () => setMenu(false);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
   return (
-    <motion.header
-      animate={{ y: hidden ? "-110%" : "0%" }}
-      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+    <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        solid ? "bg-ivory/85 backdrop-blur-md" : "bg-transparent"
+        solid
+          ? "border-b border-border/70 bg-ivory/90 shadow-[0_8px_30px_-18px_rgba(0,0,0,0.25)] backdrop-blur-md"
+          : "border-b border-transparent bg-ivory/70 backdrop-blur-sm"
       }`}
     >
-      <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-4 md:px-12">
-        <a href="/#top" className="flex items-center gap-3">
-          <img src={logoUrl} alt="Shree Kishan Jewellers & Sons" className="h-9 w-9 rounded-full object-cover" />
-          <span className="hidden font-display text-sm tracking-[0.3em] text-charcoal uppercase sm:block">
+      <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-3.5 md:px-12 md:py-4">
+        <a href="/#top" className="flex shrink-0 items-center gap-2.5">
+          <img
+            src={logoUrl}
+            alt="Shree Kishan Jewellers & Sons"
+            className="h-9 w-9 rounded-full object-cover ring-1 ring-charcoal/10 md:h-10 md:w-10"
+          />
+          <span className="font-display text-[13px] leading-none tracking-[0.22em] text-charcoal uppercase md:text-sm">
             Shree Kishan
           </span>
         </a>
-        <ul className="hidden items-center gap-9 md:flex">
+
+        <ul className="hidden items-center gap-8 lg:flex">
           {NAV.map((n) => (
             <li key={n.label} className="group relative">
               <a
@@ -122,8 +128,8 @@ export function Nav() {
                 {n.label}
               </a>
               {n.label === "Collections" && (
-                <div className="pointer-events-none absolute top-full left-1/2 w-44 -translate-x-1/2 pt-5 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
-                  <div className="border border-border bg-ivory/95 px-5 py-4 backdrop-blur">
+                <div className="pointer-events-none absolute top-full left-1/2 w-48 -translate-x-1/2 pt-4 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+                  <div className="border border-border bg-ivory/95 px-5 py-3 shadow-[0_12px_40px_-16px_rgba(0,0,0,0.3)] backdrop-blur">
                     {CATEGORIES.map((c) => (
                       <Link
                         key={c}
@@ -140,38 +146,73 @@ export function Nav() {
             </li>
           ))}
         </ul>
+
+        <a
+          href="/#contact"
+          className="hidden items-center gap-2 border border-charcoal/25 px-4 py-2 font-body text-[10px] tracking-[0.26em] text-charcoal uppercase transition-colors hover:border-wine hover:bg-wine hover:text-ivory lg:inline-flex"
+        >
+          Visit Showroom
+        </a>
+
         <button
           onClick={() => setMenu((m) => !m)}
-          aria-label="Menu"
-          className="flex flex-col gap-1.5 md:hidden"
+          aria-label={menu ? "Close menu" : "Open menu"}
+          aria-expanded={menu}
+          className="flex flex-col justify-center gap-[5px] lg:hidden"
         >
-          <span className="block h-px w-6 bg-charcoal" />
-          <span className="block h-px w-6 bg-charcoal" />
+          <span
+            className={`block h-px w-6 bg-charcoal transition-transform duration-300 ${
+              menu ? "translate-y-[6px] rotate-45" : ""
+            }`}
+          />
+          <span
+            className={`block h-px w-6 bg-charcoal transition-opacity duration-300 ${
+              menu ? "opacity-0" : ""
+            }`}
+          />
+          <span
+            className={`block h-px w-6 bg-charcoal transition-transform duration-300 ${
+              menu ? "-translate-y-[6px] -rotate-45" : ""
+            }`}
+          />
         </button>
       </nav>
+
       <AnimatePresence>
         {menu && (
-          <motion.ul
+          <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-border bg-ivory px-6 md:hidden"
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden border-t border-border bg-ivory/97 backdrop-blur-md lg:hidden"
           >
-            {NAV.map((n) => (
-              <li key={n.label}>
+            <ul className="px-5 py-2">
+              {NAV.map((n) => (
+                <li key={n.label} className="border-b border-border/60 last:border-0">
+                  <a
+                    href={n.href}
+                    onClick={() => setMenu(false)}
+                    className="block py-3.5 font-body text-[11px] tracking-[0.28em] text-charcoal uppercase"
+                  >
+                    {n.label}
+                  </a>
+                </li>
+              ))}
+              <li className="pt-2 pb-3">
                 <a
-                  href={n.href}
+                  href="/#contact"
                   onClick={() => setMenu(false)}
-                  className="block py-3 font-body text-xs tracking-[0.28em] text-charcoal uppercase"
+                  className="inline-flex items-center gap-2 bg-wine px-5 py-2.5 font-body text-[10px] tracking-[0.26em] text-ivory uppercase"
                 >
-                  {n.label}
+                  Visit Showroom
                 </a>
               </li>
-            ))}
-          </motion.ul>
+            </ul>
+          </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }
 

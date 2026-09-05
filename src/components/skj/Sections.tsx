@@ -747,12 +747,14 @@ export function Showroom() {
           />
         </figure>
       </div>
-      <StoreLightbox
-        open={open}
-        onClose={() => setOpen(false)}
-        images={storePhotos}
-      />
+      </div>
     </section>
+    <StoreLightbox
+      open={open}
+      onClose={() => setOpen(false)}
+      images={storePhotos}
+    />
+    </>
   );
 }
 

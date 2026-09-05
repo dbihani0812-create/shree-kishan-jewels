@@ -700,6 +700,7 @@ export function Gallery({ onOpen }: { onOpen?: (i: number) => void }) {
 export function Showroom() {
   const [open, setOpen] = useState(false);
   return (
+    <>
     <section className="group relative isolate overflow-hidden px-6 py-32 md:px-12">
       <img
         src={shopFacadeUrl}

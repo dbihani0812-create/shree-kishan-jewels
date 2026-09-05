@@ -192,7 +192,7 @@ export function PosterHero() {
   // headline always sits on clean image.
   useEffect(() => {
     const fit = () =>
-      setZoom(window.innerWidth / window.innerHeight > 0.85 ? 1.9 : 1.3);
+      setZoom(window.innerWidth / window.innerHeight > 0.85 ? 1.9 : 1.75);
     fit();
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);

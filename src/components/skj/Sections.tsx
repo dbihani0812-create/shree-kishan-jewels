@@ -206,25 +206,6 @@ export function PosterHero() {
         </AnimatePresence>
       </motion.div>
 
-      {/* Always-visible brand & tagline overlay — keeps written content on
-          screen regardless of how each poster image is cropped. */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 3.4, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 px-5 pb-20 text-center"
-      >
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-charcoal/70 via-charcoal/30 to-transparent" aria-hidden />
-        <p className="relative font-body text-[9px] tracking-[0.42em] text-ivory/80 uppercase md:text-[11px]">
-          Shree Kishan Jewellers & Sons
-        </p>
-        <h1 className="relative font-display text-2xl leading-[1.05] font-light tracking-[0.14em] text-ivory uppercase md:text-4xl">
-          We Believe in Quality
-        </h1>
-        <p className="relative font-display text-base italic text-champagne md:text-lg">
-          & Not in Competition.
-        </p>
-      </motion.div>
 
       <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2">
         {posters.map((_, k) => (

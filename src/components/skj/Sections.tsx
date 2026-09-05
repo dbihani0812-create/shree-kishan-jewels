@@ -747,7 +747,6 @@ export function Showroom() {
           />
         </figure>
       </div>
-      </div>
     </section>
     <StoreLightbox
       open={open}

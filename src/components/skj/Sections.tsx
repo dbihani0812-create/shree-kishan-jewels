@@ -181,10 +181,22 @@ export function PosterHero() {
   const count = heroSlides.length;
   const go = (n: number) => setI((n + count) % count);
 
+  const [zoom, setZoom] = useState(1.3);
+
   useEffect(() => {
     const t = setInterval(() => setI((v) => (v + 1) % count), 6500);
     return () => clearInterval(t);
   }, [count]);
+
+  // Crop the campaign lettering baked into the artwork so the centred
+  // headline always sits on clean image.
+  useEffect(() => {
+    const fit = () =>
+      setZoom(window.innerWidth / window.innerHeight > 0.85 ? 1.9 : 1.3);
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
 
   return (
     <section id="top" className="relative h-[100svh] overflow-hidden bg-charcoal">

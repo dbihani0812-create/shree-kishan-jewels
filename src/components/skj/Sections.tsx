@@ -9,7 +9,7 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
+import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl, storePhotos } from "@/lib/assets";
 import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
 
 const NAV = [

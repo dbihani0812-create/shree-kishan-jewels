@@ -219,6 +219,7 @@ export function Nav() {
 /* ── WOW 02 — hero: uploaded poster artwork only, no overlay text ── */
 export function PosterHero() {
   const [i, setI] = useState(0);
+  const [ready, setReady] = useState<number[]>([]);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.18]);
@@ -226,30 +227,49 @@ export function PosterHero() {
   const fade = useTransform(scrollYProgress, [0.55, 1], [1, 0]);
 
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % posters.length), 6500);
+    if (ready.length < 2) return;
+    const t = setInterval(() => {
+      setI((current) => {
+        const position = ready.indexOf(current);
+        return ready[(position + 1) % ready.length] ?? ready[0] ?? current;
+      });
+    }, 6500);
     return () => clearInterval(t);
-  }, []);
+  }, [ready]);
+
+  const markReady = (index: number) => {
+    setReady((current) => {
+      if (current.includes(index)) return current;
+      const next = [...current, index].sort((a, b) => a - b);
+      if (!current.includes(i)) setI(index);
+      return next;
+    });
+  };
 
   return (
-    <section id="top" ref={ref} className="relative h-[100svh] overflow-hidden bg-ivory">
+    <section id="top" ref={ref} className="relative h-[100svh] overflow-hidden bg-charcoal">
       <motion.div style={{ scale, y, opacity: fade }} className="absolute inset-0">
-        <AnimatePresence mode="sync">
+        {posters.map((poster, index) => (
           <motion.img
-            key={i}
-            src={posters[i]}
+            key={poster}
+            src={poster}
             alt="Shree Kishan Jewellers & Sons campaign poster"
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
+            onLoad={() => markReady(index)}
+            onError={() => {
+              setReady((current) => current.filter((item) => item !== index));
+              setI((current) => current === index ? ready[0] ?? 0 : current);
+            }}
+            initial={false}
+            animate={{ opacity: index === i && ready.includes(index) ? 1 : 0, scale: index === i ? 1 : 1.025 }}
             transition={{ duration: 1.6, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0 h-full w-full object-cover object-center"
           />
-        </AnimatePresence>
+        ))}
       </motion.div>
 
 
       <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2">
-        {posters.map((_, k) => (
+        {ready.map((k) => (
           <button
             key={k}
             onClick={() => setI(k)}

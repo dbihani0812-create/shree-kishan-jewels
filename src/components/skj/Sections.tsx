@@ -226,25 +226,24 @@ export function PosterHero() {
   const fade = useTransform(scrollYProgress, [0.55, 1], [1, 0]);
 
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % posters.length), 6500);
+    const t = setInterval(() => setI((current) => (current + 1) % posters.length), 6500);
     return () => clearInterval(t);
   }, []);
 
   return (
-    <section id="top" ref={ref} className="relative h-[100svh] overflow-hidden bg-ivory">
+    <section id="top" ref={ref} className="relative h-[100svh] overflow-hidden bg-charcoal">
       <motion.div style={{ scale, y, opacity: fade }} className="absolute inset-0">
-        <AnimatePresence mode="sync">
+        {posters.map((poster, index) => (
           <motion.img
-            key={i}
-            src={posters[i]}
+            key={poster}
+            src={poster}
             alt="Shree Kishan Jewellers & Sons campaign poster"
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
+            initial={false}
+            animate={{ opacity: index === i ? 1 : 0, scale: index === i ? 1 : 1.025 }}
             transition={{ duration: 1.6, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0 h-full w-full object-cover object-center"
           />
-        </AnimatePresence>
+        ))}
       </motion.div>
 
 

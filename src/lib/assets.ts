@@ -37,7 +37,10 @@ type Ptr = { url: string };
 const ptr = (a: unknown) => (a as Ptr).url;
 
 export const pieces: string[] = [ptr(piece_01), ptr(piece_02), ptr(piece_03), ptr(piece_04), ptr(piece_06), ptr(piece_07), ptr(piece_08), ptr(piece_09), ptr(piece_10), ptr(piece_11), ptr(piece_12), ptr(piece_13), ptr(piece_14), ptr(piece_15), ptr(piece_16), ptr(piece_17), ptr(piece_18), ptr(piece_19), ptr(piece_20), ptr(piece_21), ptr(piece_22), ptr(piece_23), ptr(piece_24), ptr(piece_25), ptr(piece_26), ptr(piece_27), ptr(piece_28)];
-export const posters: string[] = [ptr(hero_poster_4), ptr(hero_poster_5), ptr(poster_1), ptr(poster_2), ptr(poster_3)];
+// Keep the hero rotation on the two current, verified campaign portraits.
+// The older poster files are retained above for archival use but no longer
+// enter the live rotation after their hosted copies became unavailable.
+export const posters: string[] = [ptr(hero_poster_4), ptr(hero_poster_5)];
 export const logoUrl = ptr(logo);
 
 import shopFacade from "@/assets/shop-facade.jpeg.asset.json";

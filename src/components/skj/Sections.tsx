@@ -327,7 +327,7 @@ export function Categories() {
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
           {CATEGORIES.map((cat) => {
-            const hero = setsByCategory(cat)[0];
+            const cover = categoryCover(cat);
             return (
               <Link
                 key={cat}
@@ -336,9 +336,9 @@ export function Categories() {
                 className="group block"
               >
                 <div className="aspect-square overflow-hidden bg-muted">
-                  {hero && (
+                  {cover && (
                     <img
-                      src={hero.img}
+                      src={cover}
                       alt={`${cat} jewellery at Shree Kishan Jewellers & Sons, Bikaner`}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.05]"
@@ -354,6 +354,22 @@ export function Categories() {
               </Link>
             );
           })}
+          <Link to="/jewellers-in-bikaner" className="group block">
+            <div className="aspect-square overflow-hidden bg-muted">
+              <img
+                src="/images/shop-facade.jpeg"
+                alt="Shree Kishan Jewellers & Sons showroom, Sarafa Bazaar, Bikaner"
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.05]"
+              />
+            </div>
+            <h3 className="mt-4 border-t border-border pt-3 font-display text-lg font-light text-charcoal">
+              Visit the Store
+            </h3>
+            <p className="mt-1 font-body text-[10px] tracking-[0.28em] text-muted-foreground uppercase">
+              Sarafa Bazaar, Bikaner
+            </p>
+          </Link>
         </div>
       </div>
     </section>

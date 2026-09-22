@@ -182,7 +182,7 @@ function LocalPage() {
           <div className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {CATEGORIES.map((c) => {
               const sets = setsByCategory(c);
-              const hero = sets[0];
+              const cover = categoryCover(c);
               return (
                 <Link
                   key={c}
@@ -190,10 +190,10 @@ function LocalPage() {
                   search={{ category: c }}
                   className="group block"
                 >
-                  {hero && (
+                  {cover && (
                     <div className="aspect-[4/5] overflow-hidden bg-muted">
                       <img
-                        src={hero.img}
+                        src={cover}
                         alt={`${c} jewellery at Shree Kishan Jewellers & Sons, Bikaner`}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"

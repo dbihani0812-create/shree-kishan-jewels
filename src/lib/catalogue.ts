@@ -102,6 +102,24 @@ export const CATEGORY_NOTES: Record<string, string> = {
   "Bridal Sets": "For the ceremony",
 };
 
+/**
+ * Category cover photographs — real SKJ campaign portraits served from
+ * public/images. Gold Sets keeps its real gold product photograph (no campaign
+ * portrait shows an all-gold set better than the piece itself).
+ */
+export const CATEGORY_IMAGES: Record<string, string> = {
+  "Choker Sets": "/images/photo-2026-07-16-a.jpeg",
+  "Necklace Sets": "/images/photo-2026-07-16-b.jpeg",
+  "Rani Haar": "/images/hero-poster-5.jpeg",
+  "Pendant Sets": "/images/photo-2026-07-16-d.jpeg",
+  "Diamond Sets": "/images/hero-poster-4.jpeg",
+  "Bridal Sets": "/images/photo-2026-07-16-c.jpeg",
+};
+
+/** Cover for a category: campaign portrait when one exists, else the first set's photo. */
+export const categoryCover = (cat: string) =>
+  CATEGORY_IMAGES[cat] ?? setsByCategory(cat)[0]?.img;
+
 export const setsByCategory = (cat: string) => SETS.filter((s) => s.cat === cat);
 export const getSet = (slug: string) => SETS.find((s) => s.slug === slug);
 

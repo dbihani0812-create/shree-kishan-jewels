@@ -10,7 +10,7 @@ import {
 } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl, storePhotos } from "@/lib/assets";
-import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
+import { CATEGORIES, CATEGORY_NOTES, SETS, categoryCover, setsByCategory } from "@/lib/catalogue";
 
 const NAV = [
   { label: "Home", href: "/#top" },

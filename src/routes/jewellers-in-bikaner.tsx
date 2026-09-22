@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Nav } from "@/components/skj/Sections";
 import { shopFacadeUrl, shopInteriorUrl } from "@/lib/assets";
-import { CATEGORIES, CATEGORY_NOTES, setsByCategory } from "@/lib/catalogue";
+import { CATEGORIES, CATEGORY_NOTES, categoryCover, setsByCategory } from "@/lib/catalogue";
 import { useScrollMemory } from "@/hooks/use-scroll-memory";
 
 const BASE_URL = "https://shree-kishan-jewels.lovable.app";

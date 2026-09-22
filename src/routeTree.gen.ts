@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JewellersInBikanerRouteImport } from './routes/jewellers-in-bikaner'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as StylistRouteImport } from './routes/stylist'
 import { Route as CollectionsIndexRouteImport } from './routes/collections.index'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
 
@@ -30,6 +31,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StylistRoute = StylistRouteImport.update({
+  id: '/stylist',
+  path: '/stylist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CollectionsIndexRoute = CollectionsIndexRouteImport.update({
   id: '/collections/',
   path: '/collections/',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/jewellers-in-bikaner': typeof JewellersInBikanerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stylist': typeof StylistRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/collections/': typeof CollectionsIndexRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/jewellers-in-bikaner': typeof JewellersInBikanerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stylist': typeof StylistRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/collections': typeof CollectionsIndexRoute
 }
@@ -60,6 +68,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/jewellers-in-bikaner': typeof JewellersInBikanerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stylist': typeof StylistRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/collections/': typeof CollectionsIndexRoute
 }
@@ -69,6 +78,7 @@ export interface FileRouteTypes {
     | '/'
     | '/jewellers-in-bikaner'
     | '/sitemap.xml'
+    | '/stylist'
     | '/collections/$slug'
     | '/collections/'
   fileRoutesByTo: FileRoutesByTo
@@ -76,6 +86,7 @@ export interface FileRouteTypes {
     | '/'
     | '/jewellers-in-bikaner'
     | '/sitemap.xml'
+    | '/stylist'
     | '/collections/$slug'
     | '/collections'
   id:
@@ -83,6 +94,7 @@ export interface FileRouteTypes {
     | '/'
     | '/jewellers-in-bikaner'
     | '/sitemap.xml'
+    | '/stylist'
     | '/collections/$slug'
     | '/collections/'
   fileRoutesById: FileRoutesById
@@ -91,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JewellersInBikanerRoute: typeof JewellersInBikanerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StylistRoute: typeof StylistRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
 }
@@ -118,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stylist': {
+      id: '/stylist'
+      path: '/stylist'
+      fullPath: '/stylist'
+      preLoaderRoute: typeof StylistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/collections/': {
       id: '/collections/'
       path: '/collections'
@@ -139,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JewellersInBikanerRoute: JewellersInBikanerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StylistRoute: StylistRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,
 }

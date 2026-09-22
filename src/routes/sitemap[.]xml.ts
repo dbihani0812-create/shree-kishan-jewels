@@ -18,6 +18,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/collections", changefreq: "weekly", priority: "0.9" },
           { path: "/jewellers-in-bikaner", changefreq: "monthly", priority: "0.9" },
+          { path: "/stylist", changefreq: "monthly", priority: "0.8" },
           ...CATEGORIES.map((c) => ({
             path: `/collections?category=${encodeURIComponent(c)}`,
             changefreq: "monthly" as const,

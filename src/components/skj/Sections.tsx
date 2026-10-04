@@ -5,6 +5,7 @@ import {
   motion,
   useScroll,
   useTransform,
+  useReducedMotion,
 
   AnimatePresence,
 } from "motion/react";
@@ -13,67 +14,68 @@ import { pieces, posters, logoUrl, shopFacadeUrl, shopInteriorUrl, storePhotos }
 import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogue";
 
 const NAV = [
-  { label: "Home", href: "/#top" },
   { label: "Collections", href: "/collections" },
   { label: "Gallery", href: "/#gallery" },
   { label: "Our Heritage", href: "/#heritage" },
-  { label: "Bikaner Showroom", href: "/jewellers-in-bikaner" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Our Showroom", href: "/jewellers-in-bikaner" },
 ];
 
-/* ── WOW 01 — cinematic silk curtain reveal (≈2.6s) ───────────────── */
-export function CurtainReveal() {
-  const [open, setOpen] = useState(false);
-  const [gone, setGone] = useState(false);
+const SHOWROOM_MAP_URL = "https://maps.app.goo.gl/F3qpardNJB1xz6ag6";
 
-  useEffect(() => {
-    const a = setTimeout(() => setOpen(true), 320);
-    const b = setTimeout(() => setGone(true), 3300);
-    return () => {
-      clearTimeout(a);
-      clearTimeout(b);
-    };
-  }, []);
+/* One six-second timeline: introduce the brand, then reveal the store. */
+export function CurtainReveal() {
+  const [gone, setGone] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const duration = reducedMotion ? 0.1 : 6;
+  const curtainTransition = {
+    duration,
+    times: [0, 0.25, 1],
+    ease: [0.45, 0, 0.25, 1] as [number, number, number, number],
+  };
 
   if (gone) return null;
 
-  const silk =
-    "repeating-linear-gradient(90deg, color-mix(in oklab, var(--color-ivory) 92%, var(--color-charcoal)) 0px, var(--color-ivory) 22px, color-mix(in oklab, var(--color-champagne) 70%, white) 48px, var(--color-ivory) 74px, color-mix(in oklab, var(--color-ivory) 88%, var(--color-charcoal)) 96px)";
-
   return (
-    <div className="pointer-events-none fixed inset-0 z-[90] overflow-hidden">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[90] overflow-hidden">
       <motion.div
         aria-hidden
-        className="absolute inset-y-0 left-0 w-[51%]"
-        style={{ backgroundImage: silk, boxShadow: "24px 0 60px -20px rgba(0,0,0,0.35)" }}
+        className="silk-panel silk-panel-left absolute inset-y-0 left-0 w-1/2"
         initial={{ x: 0 }}
-        animate={{ x: open ? "-101%" : 0 }}
-        transition={{ duration: 2.5, ease: [0.72, 0, 0.24, 1] }}
-      />
+        animate={{ x: ["0%", "0%", "-101%"] }}
+        transition={curtainTransition}
+        onAnimationComplete={() => setGone(true)}
+      ><div className="silk-fabric" /><div className="silk-hem" /></motion.div>
       <motion.div
         aria-hidden
-        className="absolute inset-y-0 right-0 w-[51%]"
-        style={{ backgroundImage: silk, boxShadow: "-24px 0 60px -20px rgba(0,0,0,0.35)" }}
+        className="silk-panel silk-panel-right absolute inset-y-0 right-0 w-1/2"
         initial={{ x: 0 }}
-        animate={{ x: open ? "101%" : 0 }}
-        transition={{ duration: 2.5, ease: [0.72, 0, 0.24, 1] }}
-      />
+        animate={{ x: ["0%", "0%", "101%"] }}
+        transition={curtainTransition}
+      ><div className="silk-fabric" /><div className="silk-hem" /></motion.div>
       <motion.div
-        className="absolute inset-0 flex flex-col items-center justify-center text-center"
-        initial={{ opacity: 0, filter: "blur(14px)", scale: 1.06 }}
-        animate={{ opacity: [0, 1, 1, 0], filter: "blur(0px)", scale: 1 }}
-        transition={{ duration: 3.2, times: [0, 0.35, 0.78, 1], ease: "easeOut" }}
+        className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 1, 1, 0, 0] }}
+        transition={{
+          duration,
+          times: [0, 0.15, 0.25, 0.6, 1],
+          ease: "easeInOut",
+        }}
       >
-        <img src={logoUrl} alt="Shree Kishan Jewellers & Sons" className="h-20 w-20 rounded-full object-cover md:h-24 md:w-24" />
-        <h1 className="mt-6 font-display text-[7vw] leading-[0.95] font-light tracking-[0.16em] text-charcoal uppercase md:text-4xl">
+        <div className="curtain-brand">
+        <p className="curtain-provenance">Bikaner · Rajasthan</p>
+        <div className="curtain-seal"><img src={logoUrl} alt="" className="h-20 w-20 rounded-full object-cover md:h-24 md:w-24" /></div>
+        <p className="mt-8 font-display text-[7vw] leading-[0.95] font-light tracking-[0.16em] text-charcoal uppercase md:text-4xl">
           Shree Kishan
-        </h1>
-        <p className="mt-2 font-body text-[2.6vw] tracking-[0.42em] text-antique uppercase md:text-[11px]">
+        </p>
+        <p className="mt-4 font-body text-[2.6vw] tracking-[0.42em] text-wine uppercase md:text-[11px]">
           Jewellers &amp; Sons
         </p>
-        <p className="mt-6 max-w-xs font-display text-[3.4vw] italic text-wine md:max-w-md md:text-lg">
+        <div className="curtain-divider" aria-hidden="true">◇</div>
+        <p className="max-w-xs font-display text-[3.4vw] italic text-wine md:max-w-md md:text-lg">
           “We Believe in Quality and Not in Competition.”
         </p>
+        </div>
       </motion.div>
     </div>
   );
@@ -106,7 +108,7 @@ export function Nav() {
           : "border-b border-transparent bg-ivory/70 backdrop-blur-sm"
       }`}
     >
-      <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-3.5 md:px-12 md:py-4">
+      <nav className="mx-auto flex max-w-[1600px] items-center justify-between gap-6 px-5 py-4 md:px-10 md:py-5">
         <a href="/#top" className="flex shrink-0 items-center gap-2.5">
           <img
             src={logoUrl}
@@ -115,6 +117,7 @@ export function Nav() {
           />
           <span className="font-display text-[13px] leading-none tracking-[0.22em] text-charcoal uppercase md:text-sm">
             Shree Kishan
+            <span className="mt-2 block text-[8px] tracking-[0.26em]">Jewellers &amp; Sons</span>
           </span>
         </a>
 
@@ -123,7 +126,7 @@ export function Nav() {
             <li key={n.label} className="group relative">
               <a
                 href={n.href}
-                className="font-body text-[11px] tracking-[0.26em] text-charcoal/80 uppercase transition-colors hover:text-wine"
+                className="whitespace-nowrap font-body text-[10px] tracking-[0.18em] text-charcoal/80 uppercase transition-colors hover:text-wine"
               >
                 {n.label}
               </a>
@@ -148,7 +151,9 @@ export function Nav() {
         </ul>
 
         <a
-          href="/#contact"
+          href={SHOWROOM_MAP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="hidden items-center gap-2 border border-charcoal/25 px-4 py-2 font-body text-[10px] tracking-[0.26em] text-charcoal uppercase transition-colors hover:border-wine hover:bg-wine hover:text-ivory lg:inline-flex"
         >
           Visit Showroom
@@ -158,7 +163,7 @@ export function Nav() {
           onClick={() => setMenu((m) => !m)}
           aria-label={menu ? "Close menu" : "Open menu"}
           aria-expanded={menu}
-          className="flex flex-col justify-center gap-[5px] lg:hidden"
+          className="flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-[5px] lg:hidden"
         >
           <span
             className={`block h-px w-6 bg-charcoal transition-transform duration-300 ${
@@ -201,7 +206,9 @@ export function Nav() {
               ))}
               <li className="pt-2 pb-3">
                 <a
-                  href="/#contact"
+                  href={SHOWROOM_MAP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMenu(false)}
                   className="inline-flex items-center gap-2 bg-wine px-5 py-2.5 font-body text-[10px] tracking-[0.26em] text-ivory uppercase"
                 >
@@ -216,49 +223,82 @@ export function Nav() {
   );
 }
 
-/* ── WOW 02 — hero: uploaded poster artwork only, no overlay text ── */
+/* ── hero: uploaded poster artwork slideshow, no cropping or distortion ── */
 export function PosterHero() {
-  const [i, setI] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.18]);
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
-  const fade = useTransform(scrollYProgress, [0.55, 1], [1, 0]);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const heroImages = [
+    posters[0] || "/hero-1.jpg",
+    posters[1] || "/hero-2.jpg",
+  ];
 
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % posters.length), 6500);
-    return () => clearInterval(t);
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev === 0 ? 1 : 0));
+    }, 3000);
+    return () => clearInterval(timer);
   }, []);
 
   return (
-    <section id="top" ref={ref} className="relative h-[100svh] overflow-hidden bg-ivory">
-      <motion.div style={{ scale, y, opacity: fade }} className="absolute inset-0">
-        <AnimatePresence mode="sync">
-          <motion.img
-            key={i}
-            src={posters[i]}
-            alt="Shree Kishan Jewellers & Sons campaign poster"
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.6, ease: [0.4, 0, 0.2, 1] }}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-        </AnimatePresence>
-      </motion.div>
+    <>
+      <section id="top" className="jewel-hero">
+        <div className="jewel-hero-copy">
+          <p className="jewel-eyebrow"><span /> Bikaner, Rajasthan · Seven generations</p>
+          <h1>Shree Kishan<br /><em>Jewellers &amp; Sons</em></h1>
+          <div className="jewel-ornament" aria-hidden="true">◇</div>
+          <p className="jewel-tagline">“We Believe in Quality<br />and Not in Competition.”</p>
+          <p className="jewel-description">Discover the art of Polki, the warmth of gold, and the beauty of jewellery handcrafted in Bikaner.</p>
+          <div className="jewel-actions">
+            <Link to="/collections" search={{}} className="jewel-button">Explore collections <span aria-hidden="true">↗</span></Link>
+            <a href="#heritage" className="jewel-text-link">Our heritage <span aria-hidden="true">→</span></a>
+          </div>
+          <div className="jewel-hero-footnote"><span>THE HOUSE OF SHREE KISHAN</span><a href="#categories">Discover more ↓</a></div>
+        </div>
 
+        <div className="jewel-hero-art relative overflow-hidden flex items-center justify-center p-4 md:p-8">
+          <div className="relative w-full h-full min-h-[440px] md:min-h-[600px] flex items-center justify-center">
+            {heroImages.map((imgSrc, idx) => (
+              <motion.div
+                key={imgSrc}
+                initial={false}
+                animate={{ opacity: activeSlide === idx ? 1 : 0 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute inset-0 flex items-center justify-center p-2"
+                style={{
+                  pointerEvents: activeSlide === idx ? "auto" : "none",
+                  zIndex: activeSlide === idx ? 2 : 1,
+                }}
+              >
+                <img
+                  src={imgSrc}
+                  alt={
+                    idx === 0
+                      ? "Handcrafted Kundan and Polki Jewellery set by Shree Kishan Jewellers & Sons"
+                      : "Handcrafted Emerald and Kundan Jewellery set by Shree Kishan Jewellers & Sons"
+                  }
+                  className="max-h-full max-w-full w-auto h-auto object-contain rounded-md shadow-xl transition-all duration-300"
+                  style={{
+                    imageRendering: "crisp-edges",
+                    filter: "contrast(1.03) brightness(1.01)",
+                  }}
+                  fetchPriority={idx === 0 ? "high" : "low"}
+                />
+              </motion.div>
+            ))}
+          </div>
 
-      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2">
-        {posters.map((_, k) => (
-          <button
-            key={k}
-            onClick={() => setI(k)}
-            aria-label={`Poster ${k + 1}`}
-            className={`h-px w-10 transition-all duration-500 ${k === i ? "bg-ivory" : "bg-ivory/40"}`}
-          />
-        ))}
-      </div>
-    </section>
+          <span className="jewel-art-label">THE ART OF INDIAN JEWELLERY</span>
+          <div className="jewel-art-caption">
+            <span>01 / THE HERITAGE EDIT</span>
+            <Link to="/collections">
+              {activeSlide === 0 ? "Ambika Kundan Choker" : "Royal Emerald Polki Choker"}{" "}
+              <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+      <div className="jewel-ribbon"><span>Polki &amp; Kundan</span><i>✧</i><span>Gold &amp; Diamonds</span><i>✧</i><span>Bridal Jewellery</span><i>✧</i><span>Handcrafted in Bikaner</span></div>
+    </>
   );
 }
 
@@ -276,7 +316,7 @@ export function SignaturePiece() {
           className="aspect-[4/5] overflow-hidden bg-muted md:aspect-[5/4]"
         >
           <img
-            src={pieces[10]}
+            src="/signature-necklace.jpg"
             alt="Signature emerald and polki choker by Shree Kishan Jewellers & Sons"
             className="h-full w-full object-cover"
           />
@@ -376,7 +416,7 @@ export function Collections(_props?: { onOpen?: (i: number) => void }) {
               Collections
             </p>
             <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light text-charcoal md:text-6xl">
-              Ten houses of<br />
+              Many expressions of<br />
               <span className="italic text-wine">one craft.</span>
             </h2>
           </div>
@@ -468,7 +508,7 @@ const STEPS = [
   { t: "Craft", d: "Gold worked by hands trained across generations.", img: pieces[20] },
   { t: "Setting", d: "Each stone seated until the light sits still.", img: pieces[16] },
   { t: "Polish", d: "The final hours, given only to surface.", img: pieces[23] },
-  { t: "Finished", d: "The piece leaves Bikaner as an heirloom.", img: pieces[27] },
+  { t: "Finished", d: "The piece leaves Bikaner as an heirloom.", img: pieces[26] },
 ];
 
 export function Craft() {
@@ -484,8 +524,8 @@ export function Craft() {
   }, [scrollYProgress]);
 
   return (
-    <section ref={ref} className="relative h-[500svh] bg-charcoal">
-      <div className="sticky top-0 grid h-[100svh] grid-cols-1 items-center gap-8 overflow-hidden px-6 md:grid-cols-2 md:px-16">
+    <section ref={ref} className="craft-section relative h-[500svh] bg-charcoal">
+      <div className="craft-stage sticky top-0 grid h-[100svh] grid-cols-1 items-center gap-8 overflow-hidden px-6 md:grid-cols-2 md:px-16">
         <div className="order-2 md:order-1">
           <p className="font-body text-[10px] tracking-[0.42em] text-antique uppercase">
             Craftsmanship — {String(step + 1).padStart(2, "0")} / 06
@@ -963,7 +1003,28 @@ export function Contact() {
             “We Believe in Quality and Not in Competition.”
           </p>
         </div>
-        <div className="mt-20 grid gap-12 border-t border-ivory/15 pt-14 md:grid-cols-3">
+        <div className="mt-16 overflow-hidden border border-champagne/25 bg-ivory text-charcoal">
+          <div className="grid md:grid-cols-[1fr_1.7fr]">
+            <div className="flex flex-col justify-center p-8 md:p-10">
+              <p className="text-[10px] tracking-[0.3em] text-wine uppercase">Find our showroom</p>
+              <h3 className="mt-5 font-display text-4xl">Visit us in <span className="italic text-wine">Bikaner.</span></h3>
+              <p className="mt-5 text-sm leading-7 text-muted-foreground">Shree Kishan Jewellers &amp; Sons<br />Teliwara Road, Sarafa Bazaar,<br />Bikaner, Rajasthan 334001</p>
+              <a href={SHOWROOM_MAP_URL} target="_blank" rel="noopener noreferrer" className="jewel-button mt-7 self-start">
+                Visit Showroom <span aria-hidden="true">↗</span>
+              </a>
+              <p className="mt-3 text-[10px] tracking-wide text-muted-foreground">Get directions in Google Maps</p>
+            </div>
+            <iframe
+              title="Google Maps — Shree Kishan Jewellers & Sons, Bikaner"
+              src="https://www.google.com/maps?q=28.0131133,73.3032493&z=17&output=embed"
+              className="h-[340px] w-full border-0 md:h-full md:min-h-[380px]"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
+        </div>
+        <div className="mt-16 grid gap-12 border-t border-ivory/15 pt-14 md:grid-cols-3">
           <div>
             <p className="font-body text-[10px] tracking-[0.4em] text-antique uppercase">Visit</p>
             <p className="mt-4 font-body text-sm leading-relaxed text-ivory/70">
@@ -1005,6 +1066,10 @@ export function Contact() {
             </a>
           </div>
         </div>
+        <footer className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-ivory/15 pt-6 text-center font-body text-xs leading-relaxed text-ivory/60 md:flex-row md:text-left">
+          <p>© {new Date().getFullYear()} Shree Kishan Jewellers &amp; Sons. All rights reserved.</p>
+          <p className="shrink-0 tracking-wide">Made by <span className="text-champagne">DB</span></p>
+        </footer>
       </div>
     </section>
   );

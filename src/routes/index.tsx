@@ -43,8 +43,8 @@ function Index() {
   const [open, setOpen] = useState<number | null>(null);
 
   // Fresh loads / refreshes always begin at the hero; returning from a set
-  // page restores the previous scroll position. A hash is honoured on load.
-  useScrollMemory("/", { honourHash: true });
+  // page restores the previous scroll position. Fresh loads clear stale anchors.
+  useScrollMemory("/", { honourHash: true, startAtTopOnLoad: true });
 
 
 

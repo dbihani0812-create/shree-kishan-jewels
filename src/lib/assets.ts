@@ -34,7 +34,13 @@ import hero_poster_5 from "@/assets/hero-poster-5.jpeg.asset.json";
 import logo from "@/assets/logo.webp.asset.json";
 
 type Ptr = { url: string };
-const ptr = (a: unknown) => (a as Ptr).url;
+const ptr = (a: unknown) => {
+  const url = (a as Ptr).url;
+  // Asset manifests are served by Lovable, not the local Vite server.
+  return url.startsWith("/__l5e/")
+    ? `https://shree-kishan-jewels.lovable.app${url}`
+    : url;
+};
 
 export const pieces: string[] = [ptr(piece_01), ptr(piece_02), ptr(piece_03), ptr(piece_04), ptr(piece_06), ptr(piece_07), ptr(piece_08), ptr(piece_09), ptr(piece_10), ptr(piece_11), ptr(piece_12), ptr(piece_13), ptr(piece_14), ptr(piece_15), ptr(piece_16), ptr(piece_17), ptr(piece_18), ptr(piece_19), ptr(piece_20), ptr(piece_21), ptr(piece_22), ptr(piece_23), ptr(piece_24), ptr(piece_25), ptr(piece_26), ptr(piece_27), ptr(piece_28)];
 export const posters: string[] = [ptr(hero_poster_4), ptr(hero_poster_5), ptr(poster_1), ptr(poster_2), ptr(poster_3)];

@@ -15,6 +15,7 @@ import { CATEGORIES, CATEGORY_NOTES, SETS, setsByCategory } from "@/lib/catalogu
 
 const NAV = [
   { label: "Collections", href: "/collections" },
+  { label: "Personal Stylist", href: "/stylist" },
   { label: "Gallery", href: "/#gallery" },
   { label: "Our Heritage", href: "/#heritage" },
   { label: "Our Showroom", href: "/jewellers-in-bikaner" },

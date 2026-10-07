@@ -1009,7 +1009,7 @@ export function Contact() {
             <div className="flex flex-col justify-center p-8 md:p-10">
               <p className="text-[10px] tracking-[0.3em] text-wine uppercase">Find our showroom</p>
               <h3 className="mt-5 font-display text-4xl">Visit us in <span className="italic text-wine">Bikaner.</span></h3>
-              <p className="mt-5 text-sm leading-7 text-muted-foreground">Shree Kishan Jewellers &amp; Sons<br />Teliwara Road, Sarafa Bazaar,<br />Bikaner, Rajasthan 334001</p>
+              <address className="mt-5 text-sm leading-7 text-muted-foreground not-italic">Shree Kishan Jewellers &amp; Sons<br />Teliwara Road, Sarafa Bazaar,<br />Bikaner, Rajasthan 334001</address>
               <a href={SHOWROOM_MAP_URL} target="_blank" rel="noopener noreferrer" className="jewel-button mt-7 self-start">
                 Visit Showroom <span aria-hidden="true">↗</span>
               </a>
@@ -1028,10 +1028,10 @@ export function Contact() {
         <div className="mt-16 grid gap-12 border-t border-ivory/15 pt-14 md:grid-cols-3">
           <div>
             <p className="font-body text-[10px] tracking-[0.4em] text-antique uppercase">Visit</p>
-            <p className="mt-4 font-body text-sm leading-relaxed text-ivory/70">
+            <address className="mt-4 font-body text-sm leading-relaxed text-ivory/70 not-italic">
               Teliwara Road, Sarafa Bazaar, Joshiwara, Sunaron Ka Mohalla, Bikaner, Rajasthan 334001,
               India
-            </p>
+            </address>
           </div>
           <div>
             <p className="font-body text-[10px] tracking-[0.4em] text-antique uppercase">Call</p>
@@ -1067,9 +1067,20 @@ export function Contact() {
             </a>
           </div>
         </div>
-        <footer className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-ivory/15 pt-6 text-center font-body text-xs leading-relaxed text-ivory/60 md:flex-row md:text-left">
+        <footer className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-ivory/15 pt-6 text-center font-body text-xs leading-relaxed text-ivory/60 md:flex-row md:text-left">
           <p>© {new Date().getFullYear()} Shree Kishan Jewellers &amp; Sons. All rights reserved.</p>
-          <p className="shrink-0 tracking-wide">Made by <span className="text-champagne">DB</span></p>
+          <nav aria-label="Footer Navigation" className="flex flex-wrap justify-center gap-6 text-[10px] tracking-[0.2em] uppercase text-ivory/70">
+            <Link to="/collections" className="hover:text-champagne transition-colors">
+              Collections
+            </Link>
+            <Link to="/jewellers-in-bikaner" className="hover:text-champagne transition-colors">
+              Jewellers in Bikaner
+            </Link>
+            <Link to="/stylist" className="hover:text-champagne transition-colors">
+              Personal Stylist
+            </Link>
+          </nav>
+          <p className="shrink-0 tracking-wide">Sarafa Bazaar · Bikaner</p>
         </footer>
       </div>
     </section>

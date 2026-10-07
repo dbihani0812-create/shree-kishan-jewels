@@ -36,6 +36,10 @@ export const Route = createFileRoute("/collections/$slug")({
       meta: [
         { title },
         { name: "description", content: description },
+        {
+          name: "keywords",
+          content: `${set.name}, ${set.cat} jewellery, ${set.cat} Bikaner, Shree Kishan Jewellers, ${set.cat.toLowerCase()} Sarafa Bazaar, handcrafted jewellery Bikaner, Rajasthan jewellery`,
+        },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
@@ -75,11 +79,25 @@ export const Route = createFileRoute("/collections/$slug")({
             "@context": "https://schema.org",
             "@type": "Product",
             name: set.name,
+            sku: set.slug,
             url,
             image: set.gallery,
             description: set.story.join(" "),
             category: `${set.cat} Jewellery`,
             brand: { "@type": "Brand", name: "Shree Kishan Jewellers & Sons" },
+            material: "Gold, Polki, Kundan, Precious Gemstones",
+            countryOfOrigin: { "@type": "Country", name: "India" },
+            offers: {
+              "@type": "Offer",
+              url,
+              priceCurrency: "INR",
+              availability: "https://schema.org/InStock",
+              itemCondition: "https://schema.org/NewCondition",
+              seller: {
+                "@type": "JewelryStore",
+                name: "Shree Kishan Jewellers & Sons",
+              },
+            },
           }),
         },
       ],
@@ -251,6 +269,17 @@ function SetPage() {
         onClose={() => setLightbox(null)}
         onChange={setLightbox}
       />
+      <footer className="border-t border-border px-6 py-8 text-center md:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-4 font-body text-xs text-muted-foreground md:flex-row">
+          <p>© {new Date().getFullYear()} Shree Kishan Jewellers &amp; Sons · Sarafa Bazaar, Bikaner</p>
+          <nav aria-label="Footer Navigation" className="flex flex-wrap justify-center gap-6 text-[10px] tracking-[0.2em] uppercase">
+            <Link to="/" className="hover:text-charcoal transition-colors">Home</Link>
+            <Link to="/collections" className="hover:text-charcoal transition-colors">Collections</Link>
+            <Link to="/jewellers-in-bikaner" className="hover:text-charcoal transition-colors">Jewellers in Bikaner</Link>
+            <Link to="/stylist" className="hover:text-charcoal transition-colors">Personal Stylist</Link>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }

@@ -22,6 +22,11 @@ export const Route = createFileRoute("/jewellers-in-bikaner")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
+      {
+        name: "keywords",
+        content:
+          "jewellers in Bikaner, gold jewellers Bikaner, Sarafa Bazaar jewellers, bridal jewellers Bikaner, polki jewellers Bikaner, kundan jewellery Bikaner, best jewellers Bikaner, jewellery shop near me Bikaner, Shree Kishan Jewellers, wedding jewellery Rajasthan, emerald jewellery Bikaner",
+      },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
@@ -38,20 +43,44 @@ export const Route = createFileRoute("/jewellers-in-bikaner")({
           "@context": "https://schema.org",
           "@type": "JewelryStore",
           name: "Shree Kishan Jewellers & Sons",
+          alternateName: "SKJ Bikaner",
           url: URL,
           image: [shopFacadeUrl, shopInteriorUrl],
           description: DESCRIPTION,
-          telephone: "+91-99288-73555",
+          telephone: ["+91-99288-73555", "+91-97999-58266", "+91-89493-77051"],
+          email: "skj.bkn07@gmail.com",
+          priceRange: "₹₹₹",
+          currenciesAccepted: "INR",
           address: {
             "@type": "PostalAddress",
-            streetAddress: "Sarafa Bazaar",
+            streetAddress: "Teliwara Road, Sarafa Bazaar, Joshiwara, Sunaron Ka Mohalla",
             addressLocality: "Bikaner",
             addressRegion: "Rajasthan",
+            postalCode: "334001",
             addressCountry: "IN",
           },
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: 28.0131133,
+            longitude: 73.3032493,
+          },
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+              opens: "10:00",
+              closes: "20:00",
+            },
+          ],
           areaServed: [
             { "@type": "City", name: "Bikaner" },
             { "@type": "State", name: "Rajasthan" },
+            { "@type": "Country", name: "India" },
+          ],
+          sameAs: [
+            "https://instagram.com/shree_kishan_jewellers",
+            "https://wa.me/919928873555",
+            "https://maps.app.goo.gl/F3qpardNJB1xz6ag6",
           ],
           makesOffer: CATEGORIES.map((c) => ({
             "@type": "Offer",
@@ -67,6 +96,47 @@ export const Route = createFileRoute("/jewellers-in-bikaner")({
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
             { "@type": "ListItem", position: 2, name: "Jewellers in Bikaner", item: URL },
+          ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "Which is the most trusted jewellery shop in Bikaner for bridal jewellery?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Shree Kishan Jewellers & Sons in Sarafa Bazaar has been crafting bridal jewellery for seven generations in Bikaner. Bridal sets are fitted and made in their own workshop above the showroom.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Where can I buy authentic Polki and Kundan jewellery in Bikaner?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "You can buy authentic handcrafted Polki and Kundan jewellery at Shree Kishan Jewellers & Sons, located on Teliwara Road in Sarafa Bazaar, Bikaner, Rajasthan.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What jewellery is Bikaner famous for?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Bikaner is renowned across Rajasthan and India for traditional Kundan Jadau, uncut Polki diamond settings, handcrafted Meenakari work, and royal Rajputi bridal jewellery.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Can I customize bridal jewellery at Shree Kishan Jewellers in Bikaner?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, Shree Kishan Jewellers offers in-house custom jewellery design and bridal fittings. Everything is made in their Sarafa Bazaar workshop, including sizing, restringing, and matching gemstones.",
+              },
+            },
           ],
         }),
       },
@@ -276,10 +346,11 @@ function LocalPage() {
           <h2 id="visit" className="font-display text-3xl font-light text-charcoal md:text-4xl">
             Visit the showroom
           </h2>
-          <p className="mt-6 font-body text-sm leading-relaxed text-muted-foreground">
-            Sarafa Bazaar, Bikaner, Rajasthan. Bridal appointments are best made a few days
-            ahead so the karigars can prepare the pieces you want to see.
-          </p>
+          <address className="mt-6 font-body text-sm leading-relaxed text-muted-foreground not-italic">
+            Teliwara Road, Sarafa Bazaar, Joshiwara, Sunaron Ka Mohalla, Bikaner, Rajasthan 334001, India.
+            <br className="hidden sm:inline" />
+            {" "}Bridal appointments are best made a few days ahead so the karigars can prepare the pieces you want to see.
+          </address>
           <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-4">
             <a
               href={WHATSAPP}
@@ -298,6 +369,17 @@ function LocalPage() {
           </div>
         </div>
       </section>
+
+      <footer className="border-t border-border px-6 py-8 text-center md:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-4 font-body text-xs text-muted-foreground md:flex-row">
+          <p>© {new Date().getFullYear()} Shree Kishan Jewellers &amp; Sons · Sarafa Bazaar, Bikaner</p>
+          <nav aria-label="Footer Navigation" className="flex flex-wrap justify-center gap-6 text-[10px] tracking-[0.2em] uppercase">
+            <Link to="/" className="hover:text-charcoal transition-colors">Home</Link>
+            <Link to="/collections" className="hover:text-charcoal transition-colors">Collections</Link>
+            <Link to="/stylist" className="hover:text-charcoal transition-colors">Personal Stylist</Link>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }

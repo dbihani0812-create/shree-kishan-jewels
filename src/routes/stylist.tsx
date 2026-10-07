@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "motion/react";
 import { Nav } from "@/components/skj/Sections";
+import { shopFacadeUrl } from "@/lib/assets";
 import { recommendSets, type StylistResult } from "@/lib/stylist.functions";
 
 const BASE_URL = "https://shree-kishan-jewels.lovable.app";
@@ -23,13 +24,55 @@ export const Route = createFileRoute("/stylist")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
+      {
+        name: "keywords",
+        content:
+          "AI jewellery stylist, jewellery stylist Bikaner, wedding jewellery styling, bridal jewellery matching, Shree Kishan Jewellers stylist, jewellery consultation Bikaner",
+      },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/stylist` },
+      { property: "og:image", content: shopFacadeUrl },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: shopFacadeUrl },
     ],
     links: [{ rel: "canonical", href: `${BASE_URL}/stylist` }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+            { "@type": "ListItem", position: 2, name: "Personal Stylist", item: `${BASE_URL}/stylist` },
+          ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "SKJ Personal Jewellery Stylist",
+          url: `${BASE_URL}/stylist`,
+          applicationCategory: "ShoppingApplication",
+          description: DESCRIPTION,
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "INR",
+          },
+          provider: {
+            "@type": "Organization",
+            name: "Shree Kishan Jewellers & Sons",
+          },
+        }),
+      },
+    ],
   }),
   component: StylistPage,
 });
@@ -227,6 +270,16 @@ function StylistPage() {
           </p>
         </div>
       </section>
+      <footer className="border-t border-border px-6 py-8 text-center md:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-4 font-body text-xs text-muted-foreground md:flex-row">
+          <p>© {new Date().getFullYear()} Shree Kishan Jewellers &amp; Sons · Sarafa Bazaar, Bikaner</p>
+          <nav aria-label="Footer Navigation" className="flex flex-wrap justify-center gap-6 text-[10px] tracking-[0.2em] uppercase">
+            <Link to="/" className="hover:text-charcoal transition-colors">Home</Link>
+            <Link to="/collections" className="hover:text-charcoal transition-colors">Collections</Link>
+            <Link to="/jewellers-in-bikaner" className="hover:text-charcoal transition-colors">Jewellers in Bikaner</Link>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }

@@ -31,6 +31,12 @@ export const Route = createFileRoute("/collections/")({
       meta: [
         { title },
         { name: "description", content: description },
+        {
+          name: "keywords",
+          content: isAll
+            ? "jewellery collections Bikaner, polki jewellery, kundan jewellery, diamond jewellery, gold jewellery, bridal jewellery, Shree Kishan Jewellers, Sarafa Bazaar Bikaner, Rajasthan jewellery shop"
+            : `${cat} jewellery, ${cat} Bikaner, ${cat.toLowerCase()} sets, Shree Kishan Jewellers ${cat}, handcrafted ${cat.toLowerCase()} Sarafa Bazaar, Rajasthan ${cat.toLowerCase()} jewellery`,
+        },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
@@ -187,6 +193,17 @@ function CollectionsPage() {
           </div>
         </div>
       </section>
+
+      <footer className="border-t border-border px-6 py-8 text-center md:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-4 font-body text-xs text-muted-foreground md:flex-row">
+          <p>© {new Date().getFullYear()} Shree Kishan Jewellers &amp; Sons · Sarafa Bazaar, Bikaner</p>
+          <nav aria-label="Footer Navigation" className="flex flex-wrap justify-center gap-6 text-[10px] tracking-[0.2em] uppercase">
+            <Link to="/" className="hover:text-charcoal transition-colors">Home</Link>
+            <Link to="/jewellers-in-bikaner" className="hover:text-charcoal transition-colors">Jewellers in Bikaner</Link>
+            <Link to="/stylist" className="hover:text-charcoal transition-colors">Personal Stylist</Link>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }

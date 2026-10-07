@@ -1,8 +1,16 @@
+# robots.txt — Shree Kishan Jewellers & Sons
+# https://shree-kishan-jewels.lovable.app
+
 User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot-Image
 Allow: /
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 2
 
 User-agent: Twitterbot
 Allow: /
@@ -10,7 +18,21 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
 
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: *
+Allow: /
+Disallow: /_build/
+Disallow: /api/
+
 Sitemap: https://shree-kishan-jewels.lovable.app/sitemap.xml
+
+# Host directive (used by Yandex)
+Host: https://shree-kishan-jewels.lovable.app

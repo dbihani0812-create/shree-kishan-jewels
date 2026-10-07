@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { logoUrl, shopFacadeUrl } from "@/lib/assets";
 import {
   Outlet,
   Link,
@@ -77,28 +78,58 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shree Kishan Jewellers & Sons — Bikaner" },
+      { title: "Shree Kishan Jewellers & Sons — Bikaner | Polki, Kundan, Diamond & Bridal Jewellery" },
       {
         name: "description",
         content:
-          "Polki, diamond, gold, kundan and bridal jewellery from Shree Kishan Jewellers & Sons, Sarafa Bazaar, Bikaner.",
+          "Shree Kishan Jewellers & Sons — seven generations of handcrafted Polki, Kundan, Diamond, Gold & Bridal jewellery at Sarafa Bazaar, Bikaner, Rajasthan. Visit our showroom or enquire on WhatsApp.",
+      },
+      {
+        name: "keywords",
+        content:
+          "jewellers in Bikaner, Shree Kishan Jewellers, polki jewellery Bikaner, kundan jewellery Bikaner, diamond jewellery Bikaner, gold jewellery Bikaner, bridal jewellery Bikaner, Sarafa Bazaar Bikaner, jewellery shop Bikaner, Rajasthan jewellers, emerald jewellery, rani haar, choker sets, necklace sets, wedding jewellery Rajasthan",
       },
       { name: "author", content: "Shree Kishan Jewellers & Sons" },
-      { property: "og:title", content: "Shree Kishan Jewellers & Sons — Bikaner" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+      { name: "theme-color", content: "#F5F0E8" },
+      { name: "format-detection", content: "telephone=yes" },
+      // Geo meta — Bikaner, Rajasthan
+      { name: "geo.region", content: "IN-RJ" },
+      { name: "geo.placename", content: "Bikaner, Rajasthan, India" },
+      { name: "geo.position", content: "28.0131133;73.3032493" },
+      { name: "ICBM", content: "28.0131133, 73.3032493" },
+      // Open Graph
+      { property: "og:site_name", content: "Shree Kishan Jewellers & Sons" },
+      { property: "og:title", content: "Shree Kishan Jewellers & Sons — Bikaner | Polki, Kundan, Diamond & Bridal Jewellery" },
       {
         property: "og:description",
-        content: "Seven generations of fine jewellery craftsmanship in Bikaner, Rajasthan.",
+        content: "Seven generations of fine jewellery craftsmanship in Bikaner, Rajasthan. Handcrafted Polki, Kundan, Diamond, Gold & Bridal jewellery.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://shree-kishan-jewels.lovable.app/" },
+      { property: "og:image", content: shopFacadeUrl },
+      { property: "og:image:alt", content: "Shree Kishan Jewellers & Sons showroom at Sarafa Bazaar, Bikaner" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:locale", content: "en_IN" },
+      // Twitter
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Shree Kishan Jewellers & Sons — Bikaner" },
+      { name: "twitter:description", content: "Seven generations of fine jewellery craftsmanship in Bikaner, Rajasthan." },
+      { name: "twitter:image", content: shopFacadeUrl },
+      { name: "twitter:image:alt", content: "Shree Kishan Jewellers & Sons showroom at Sarafa Bazaar, Bikaner" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "canonical", href: "https://shree-kishan-jewels.lovable.app/" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
+      { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap",
@@ -106,6 +137,78 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Shree Kishan Jewellers & Sons",
+          alternateName: "SKJ Bikaner",
+          url: "https://shree-kishan-jewels.lovable.app",
+          logo: logoUrl,
+          image: shopFacadeUrl,
+          description:
+            "Seven generations of handcrafted Polki, Kundan, Diamond, Gold & Bridal jewellery at Sarafa Bazaar, Bikaner, Rajasthan.",
+          telephone: ["+91-99288-73555", "+91-97999-58266", "+91-89493-77051"],
+          email: "skj.bkn07@gmail.com",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Teliwara Road, Sarafa Bazaar, Joshiwara, Sunaron Ka Mohalla",
+            addressLocality: "Bikaner",
+            addressRegion: "Rajasthan",
+            postalCode: "334001",
+            addressCountry: "IN",
+          },
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: 28.0131133,
+            longitude: 73.3032493,
+          },
+          sameAs: [
+            "https://instagram.com/shree_kishan_jewellers",
+            "https://wa.me/919928873555",
+            "https://maps.app.goo.gl/F3qpardNJB1xz6ag6",
+          ],
+          contactPoint: [
+            {
+              "@type": "ContactPoint",
+              telephone: "+91-99288-73555",
+              contactType: "sales",
+              areaServed: "IN",
+              availableLanguage: ["Hindi", "English", "Marwari"],
+            },
+          ],
+          foundingDate: "1900",
+          numberOfEmployees: { "@type": "QuantitativeValue", minValue: 10, maxValue: 50 },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Shree Kishan Jewellers & Sons",
+          url: "https://shree-kishan-jewels.lovable.app",
+          description:
+            "Official website of Shree Kishan Jewellers & Sons — handcrafted Polki, Kundan, Diamond, Gold & Bridal jewellery from Sarafa Bazaar, Bikaner.",
+          publisher: {
+            "@type": "Organization",
+            name: "Shree Kishan Jewellers & Sons",
+          },
+          inLanguage: "en-IN",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: "https://shree-kishan-jewels.lovable.app/collections?category={search_term_string}",
+            },
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
